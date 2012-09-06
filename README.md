@@ -1,0 +1,1 @@
+based on the console control from http://www.codeproject.com/Articles/335909/Embedding-a-Console-in-a-C-Application
