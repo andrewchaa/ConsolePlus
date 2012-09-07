@@ -92,12 +92,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleControl.WPF\ConsoleControl.WPF.csproj">
-      <Project>{FD9FF553-D7C6-45A8-8321-5D9058B38E2D}</Project>
-      <Name>ConsoleControl.WPF</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ConsoleControl.png" />
   </ItemGroup>
   <ItemGroup>
