@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Windows.Input;
 
 namespace Console_
@@ -15,6 +13,7 @@ namespace Console_
         private TextReader _outputReader;
         private TextReader _errorReader;
         private readonly EnhancedConsole _console;
+        private int _lastPosition;
 
         public MainWindow()
         {
@@ -29,19 +28,23 @@ namespace Console_
             if (args.UserState is string)
             {
                 tbxConsole.Text += args.UserState;
+                _lastPosition = tbxConsole.Text.ToCharArray().Length;
+
                 tbxConsole.Focus();
-                tbxConsole.SelectionStart = tbxConsole.Text.ToCharArray().Length;
+                tbxConsole.SelectionStart = _lastPosition;
                 tbxConsole.SelectionLength = 0;
             }
         }
 
         private void TbxConsoleKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            string input = e.Key.ToString();
             if (e.Key == Key.Return)
-                input = Environment.NewLine;
+            {
+                _console.Write(tbxConsole.GetLineText(tbxConsole.LineCount-1) + Environment.NewLine);
 
-            _console.Write(input);
+            }
+                
+
         }
 
     }
