@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Console_
 {
@@ -32,29 +21,39 @@ namespace Console_
         {
             InitializeComponent();
 
-            _worker = new BackgroundWorker()
-                          {
-                              WorkerReportsProgress = true,
-                              WorkerSupportsCancellation = true
-                          };
-            _worker.DoWork += (sender, args) =>
-                                  {
-                                      while (!_process.StandardOutput.EndOfStream)
-                                      {
-                                          string output = _process.StandardOutput.ReadLine();
-                                          _worker.ReportProgress(0, output);
-                                      }
-                                  };
-
-            _worker.ProgressChanged += (sender, args) =>
-                                           {
-                                               if (args.UserState is string)
-                                               {
-                                                   tbxConsole.Text += args.UserState + Environment.NewLine;
-                                               }
-                                           };
-
+            SetBackgroundWorker();
             StartProcess("cmd.exe", string.Empty);
+        }
+
+        private void SetBackgroundWorker()
+        {
+            _worker = new BackgroundWorker {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
+            _worker.DoWork += (sender, args) => ReadOutput(_worker);
+            _worker.ProgressChanged += (sender, args) => UpdateConsole(args);
+        }
+
+        private void UpdateConsole(ProgressChangedEventArgs args)
+        {
+            if (args.UserState is string)
+            {
+                tbxConsole.Text += args.UserState; // +Environment.NewLine;
+                tbxConsole.Focus();
+                tbxConsole.SelectionStart = tbxConsole.Text.ToCharArray().Length;
+                tbxConsole.SelectionLength = 0;
+            }
+        }
+
+        private void ReadOutput(BackgroundWorker worker)
+        {
+            int count;
+            var buffer = new char[1024];
+            do
+            {
+                var builder = new StringBuilder();
+                count = _process.StandardOutput.Read(buffer, 0, 1024);
+                builder.Append(buffer, 0, count);
+                worker.ReportProgress(0, builder.ToString());
+            } while (count > 0);
         }
 
         private void StartProcess(string filename, string arguments)
@@ -63,21 +62,16 @@ namespace Console_
                            {
                                UseShellExecute = false, 
                                ErrorDialog = false,
-//                               CreateNoWindow = true,
+                               CreateNoWindow = true,
                                RedirectStandardError = true,
                                RedirectStandardInput = true,
                                RedirectStandardOutput = true
                            };
 
-            _process = new Process()
-                           {
-                               EnableRaisingEvents = true,
-                               StartInfo = info,
-                           };
+            _process = new Process { EnableRaisingEvents = true, StartInfo = info, };
             _process.Start();
 
             _worker.RunWorkerAsync();
-//            tbxConsole.Text += _process.StandardOutput.ReadToEnd();
         }
     }
 }
