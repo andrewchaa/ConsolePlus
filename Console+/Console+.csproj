@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>console.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Apex">
       <HintPath>..\lib\Apex.dll</HintPath>
@@ -65,6 +68,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnhancedConsole.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -92,31 +96,19 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ConsoleControl.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Control_TextBox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\GotoShortcuts.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Information.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Stop.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Console.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Console.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="console.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
