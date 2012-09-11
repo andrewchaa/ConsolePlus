@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Console_.Domain
+namespace ConsolePlus.Domain
 {
     public class CommandHistory
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{D9FAD6F4-A68E-48C1-B17E-463C25857A8B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Console_.Test</RootNamespace>
-    <AssemblyName>Console+.Test</AssemblyName>
+    <RootNamespace>ConsolePlus.Test</RootNamespace>
+    <AssemblyName>ConsolePlus.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Console+\Console+.csproj">
+    <ProjectReference Include="..\Console+\ConsolePlus.csproj">
       <Project>{95AAD7C6-17A9-40EA-95C9-157D3C6B76F9}</Project>
-      <Name>Console+</Name>
+      <Name>ConsolePlus</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

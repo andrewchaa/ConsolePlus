@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
-using Console_.Domain;
+using ConsolePlus.Domain;
 
-namespace Console_
+namespace ConsolePlus
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

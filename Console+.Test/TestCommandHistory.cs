@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using Console_.Domain;
+using ConsolePlus.Domain;
 using Moq;
 using NUnit.Framework;
 
-namespace Console_.Test
+namespace ConsolePlus.Test
 {
     [TestFixture]
     public class TestCommandHistory

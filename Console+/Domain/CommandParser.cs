@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Console_.Domain
+namespace ConsolePlus.Domain
 {
     public class CommandParser : IParse
     {

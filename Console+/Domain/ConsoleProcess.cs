@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Console_.Domain
+namespace ConsolePlus.Domain
 {
     public class ConsoleProcess : IConsoleProcess
     {

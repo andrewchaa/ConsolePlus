@@ -1,4 +1,4 @@
-namespace Console_.Domain
+namespace ConsolePlus.Domain
 {
     public class Command
     {

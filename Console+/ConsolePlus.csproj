@@ -8,8 +8,8 @@
     <ProjectGuid>{95AAD7C6-17A9-40EA-95C9-157D3C6B76F9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Console_</RootNamespace>
-    <AssemblyName>Console+</AssemblyName>
+    <RootNamespace>ConsolePlus</RootNamespace>
+    <AssemblyName>ConsolePlus</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -71,7 +71,7 @@
     <Compile Include="Domain\CommandParser.cs" />
     <Compile Include="Domain\IConsoleWindow.cs" />
     <Compile Include="Domain\IParse.cs" />
-    <Compile Include="EnhancedConsole.cs" />
+    <Compile Include="Domain\EnhancedConsole.cs" />
     <Compile Include="Domain\ConsoleProcess.cs" />
     <Compile Include="Domain\IConsoleProcess.cs" />
     <Compile Include="MainWindow.xaml.cs">

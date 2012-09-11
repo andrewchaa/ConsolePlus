@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console+", "Console+\Console+.csproj", "{95AAD7C6-17A9-40EA-95C9-157D3C6B76F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePlus", "Console+\ConsolePlus.csproj", "{95AAD7C6-17A9-40EA-95C9-157D3C6B76F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console+.Test", "Console+.Test\Console+.Test.csproj", "{D9FAD6F4-A68E-48C1-B17E-463C25857A8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePlus.Test", "Console+.Test\ConsolePlus.Test.csproj", "{D9FAD6F4-A68E-48C1-B17E-463C25857A8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

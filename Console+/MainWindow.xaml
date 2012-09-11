@@ -1,4 +1,4 @@
-﻿<Window x:Class="Console_.MainWindow"
+﻿<Window x:Class="ConsolePlus.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Console+" Height="705" Width="935">

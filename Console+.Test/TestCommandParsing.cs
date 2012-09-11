@@ -1,8 +1,7 @@
-﻿using Console_.Domain;
+﻿using ConsolePlus.Domain;
 using NUnit.Framework;
-using System.Text.RegularExpressions;
 
-namespace Console_.Test
+namespace ConsolePlus.Test
 {
     [TestFixture]
     public class TestCommandParsing

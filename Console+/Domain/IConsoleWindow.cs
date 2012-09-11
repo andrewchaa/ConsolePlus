@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Console_.Domain
+namespace ConsolePlus.Domain
 {
     public interface IConsoleWindow
     {

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text;
-using Console_.Domain;
 
-namespace Console_
+namespace ConsolePlus.Domain
 {
     public class EnhancedConsole
     {
