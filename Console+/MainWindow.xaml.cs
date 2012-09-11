@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Windows.Input;
 using Console_.Domain;
 
@@ -9,20 +8,17 @@ namespace Console_
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : IConsoleWindow
     {
-        private TextReader _outputReader;
-        private TextReader _errorReader;
         private readonly EnhancedConsole _console;
-        private int _lastPosition;
-        private IParse _command;
+        private readonly IParse _command;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _command = new CommandParser();
-            _console = new EnhancedConsole(this);
+            _console = new EnhancedConsole(this, new ConsoleProcess());
             _console.Start();
         }
 
@@ -31,10 +27,15 @@ namespace Console_
             if (!(args.UserState is string)) return;
             
             tbxConsole.Text += args.UserState;
-            _lastPosition = tbxConsole.Text.ToCharArray().Length;
 
+            MoveCursorToTheEnd();
+        }
+
+        private void MoveCursorToTheEnd()
+        {
+            int lastPosition = tbxConsole.Text.Length;
             tbxConsole.Focus();
-            tbxConsole.SelectionStart = _lastPosition;
+            tbxConsole.SelectionStart = lastPosition;
             tbxConsole.SelectionLength = 0;
         }
 
@@ -42,14 +43,24 @@ namespace Console_
         {
             if (e.Key == Key.Return)
             {
-                var command = _command.Parse(tbxConsole.GetLineText(tbxConsole.LineCount - 1));
+                var commandText = _command.Parse(tbxConsole.GetLineText(tbxConsole.LineCount - 1));
                 
-                _console.Write(command.UserCommand + Environment.NewLine);
-                tbxConsole.Text = tbxConsole.Text.Substring(0, tbxConsole.Text.Length - command.UserCommand.Length);
-
+                _console.Write(commandText.UserCommand + Environment.NewLine);
+                tbxConsole.Text = tbxConsole.Text.Substring(0, tbxConsole.Text.Length - commandText.UserCommand.Length);
             }
-                
+        }
 
+        private void tbxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+                var commandText = _command.Parse(tbxConsole.GetLineText(tbxConsole.LineCount - 1));
+                tbxConsole.Text = tbxConsole.Text.Substring(0, tbxConsole.Text.Length - commandText.UserCommand.Length) +
+                    _console.History.Get();
+
+                MoveCursorToTheEnd();
+                e.Handled = true;
+            }
         }
 
     }

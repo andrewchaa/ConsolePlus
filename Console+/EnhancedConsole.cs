@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Text;
+using Console_.Domain;
 
 namespace Console_
 {
     public class EnhancedConsole
     {
-        private readonly MainWindow _window;
+        private readonly IConsoleWindow _window;
         private BackgroundWorker _worker;
-        private Process _process;
+        private readonly IConsoleProcess _process;
 
-        public EnhancedConsole(MainWindow window)
+        public EnhancedConsole(IConsoleWindow window, IConsoleProcess process)
         {
             _window = window;
+            _process = process;
             SetBackgroundWorker();
+            History = new CommandHistory();
         }
+
+        public CommandHistory History { get; private set; }
 
         private void SetBackgroundWorker()
         {
@@ -33,7 +35,7 @@ namespace Console_
             do
             {
                 var builder = new StringBuilder();
-                count = _process.StandardOutput.Read(buffer, 0, 1024);
+                count = _process.Read(buffer, 0, 1024);
                 builder.Append(buffer, 0, count);
                 worker.ReportProgress(0, builder.ToString());
 
@@ -42,25 +44,14 @@ namespace Console_
 
         public void Start()
         {
-            var info = new ProcessStartInfo("cmd.exe", string.Empty)
-            {
-                UseShellExecute = false,
-                ErrorDialog = false,
-                CreateNoWindow = true,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true
-            };
-
-            _process = new Process { EnableRaisingEvents = true, StartInfo = info, };
             _process.Start();
-
             _worker.RunWorkerAsync();
         }
 
-        public void Write(string s)
+        public void Write(string command)
         {
-            _process.StandardInput.Write(s);
+            _process.Write(command); 
+            History.Add(command);
         }
     }
 }

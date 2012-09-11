@@ -67,9 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Command.cs" />
+    <Compile Include="Domain\CommandHistory.cs" />
     <Compile Include="Domain\CommandParser.cs" />
+    <Compile Include="Domain\IConsoleWindow.cs" />
     <Compile Include="Domain\IParse.cs" />
     <Compile Include="EnhancedConsole.cs" />
+    <Compile Include="Domain\ConsoleProcess.cs" />
+    <Compile Include="Domain\IConsoleProcess.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Console+" Height="705" Width="935">
     <Grid>
-        <TextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" KeyDown="TbxConsoleKeyDown" TextWrapping="WrapWithOverflow" Background="Black" Foreground="#FF28C128"></TextBox>
+        <TextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" KeyDown="TbxConsoleKeyDown" TextWrapping="WrapWithOverflow" Background="Black" Foreground="#FF28C128" 
+                 PreviewKeyDown="tbxConsole_PreviewKeyDown"></TextBox>
     </Grid>
 </Window>
