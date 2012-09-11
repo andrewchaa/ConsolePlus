@@ -1,8 +1,8 @@
 ﻿<Window x:Class="Console_.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="468" Width="598">
+        Title="Console+" Height="705" Width="935">
     <Grid>
-        <TextBox Height="Auto" Name="tbxConsole" Width="Auto" AcceptsTab="False" AcceptsReturn="False" KeyDown="TbxConsoleKeyDown" />
+        <TextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" KeyDown="TbxConsoleKeyDown" TextWrapping="WrapWithOverflow" Background="Black" Foreground="#FF28C128"></TextBox>
     </Grid>
 </Window>

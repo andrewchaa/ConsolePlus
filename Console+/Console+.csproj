@@ -40,9 +40,6 @@
     <ApplicationIcon>console.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Apex">
-      <HintPath>..\lib\Apex.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -70,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Command.cs" />
+    <Compile Include="Domain\CommandParser.cs" />
+    <Compile Include="Domain\IParse.cs" />
     <Compile Include="EnhancedConsole.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

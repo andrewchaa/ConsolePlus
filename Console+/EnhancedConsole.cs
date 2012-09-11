@@ -36,6 +36,7 @@ namespace Console_
                 count = _process.StandardOutput.Read(buffer, 0, 1024);
                 builder.Append(buffer, 0, count);
                 worker.ReportProgress(0, builder.ToString());
+
             } while (count > 0);
         }
 
