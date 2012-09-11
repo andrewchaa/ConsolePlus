@@ -60,7 +60,7 @@ namespace Console_
 
                 MoveCursorToTheEnd();
                 e.Handled = true;
-            }
+            } 
         }
 
     }
