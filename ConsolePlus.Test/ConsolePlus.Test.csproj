@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestAttachingConsole.cs" />
     <Compile Include="TestCommandHistory.cs" />
     <Compile Include="TestCommandParsing.cs" />
   </ItemGroup>
@@ -55,7 +56,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Console+\ConsolePlus.csproj">
+    <ProjectReference Include="..\ConsolePlus\ConsolePlus.csproj">
       <Project>{95AAD7C6-17A9-40EA-95C9-157D3C6B76F9}</Project>
       <Name>ConsolePlus</Name>
     </ProjectReference>

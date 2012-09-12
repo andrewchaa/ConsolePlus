@@ -4,7 +4,7 @@ namespace ConsolePlus.Domain
 {
     public class ConsoleProcess : IConsoleProcess
     {
-        private Process _process;
+        private readonly Process _process;
 
         public ConsoleProcess()
         {

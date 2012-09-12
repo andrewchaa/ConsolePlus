@@ -74,6 +74,11 @@
     <Compile Include="Domain\EnhancedConsole.cs" />
     <Compile Include="Domain\ConsoleProcess.cs" />
     <Compile Include="Domain\IConsoleProcess.cs" />
+    <Compile Include="Infrastructure\ConsoleInputBuffer.cs" />
+    <Compile Include="Infrastructure\ConsoleScreenBuffer.cs" />
+    <Compile Include="Infrastructure\JConsole.cs" />
+    <Compile Include="Infrastructure\WinApi.cs" />
+    <Compile Include="Infrastructure\WinCon.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

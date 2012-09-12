@@ -43,6 +43,7 @@ namespace ConsolePlus.Domain
         public void Start()
         {
             _process.Start();
+
             _worker.RunWorkerAsync();
         }
 
