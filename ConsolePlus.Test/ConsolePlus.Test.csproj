@@ -48,10 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestAttachingConsole.cs" />
-    <Compile Include="TestAttachingConsole2.cs" />
+    <Compile Include="TestConsoleHandle.cs" />
     <Compile Include="TestCommandHistory.cs" />
     <Compile Include="TestCommandParsing.cs" />
+    <Compile Include="TestEnahncedConsole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

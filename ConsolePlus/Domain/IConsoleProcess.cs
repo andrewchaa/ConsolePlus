@@ -5,5 +5,6 @@ namespace ConsolePlus.Domain
         int Read(char[] buffer, int index, int size);
         void Start();
         void Write(string command);
+        string Read1();
     }
 }

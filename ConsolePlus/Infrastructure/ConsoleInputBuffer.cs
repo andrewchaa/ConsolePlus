@@ -774,7 +774,7 @@ namespace ConsolePlus.Infrastructure
         public void WriteEvents(EventArgs[] events, int nEvents)
         {
             // convert EventArgs to ConsoleInputEventInfo structures.
-            ConsoleInputEventInfo[] consoleEvents = new ConsoleInputEventInfo[nEvents];
+            var consoleEvents = new ConsoleInputEventInfo[nEvents];
             for (int i = 0; i < nEvents; i++)
             {
                 EventArgs e = events[i];

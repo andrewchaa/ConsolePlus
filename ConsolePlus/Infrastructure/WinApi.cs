@@ -59,16 +59,18 @@ namespace ConsolePlus.Infrastructure
             IntPtr TemplateFile);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(
-            string lpClassName,
-            string lpWindowName);
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern int GetWindowThreadProcessId(
-          IntPtr hWnd,
-          ref int processId);
+        public static extern int GetWindowThreadProcessId(IntPtr hWnd, ref int processId);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern int GetCurrentProcessId();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+        
+        [DllImport("user32.dll")]
+        public static extern IntPtr PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
     }
 }

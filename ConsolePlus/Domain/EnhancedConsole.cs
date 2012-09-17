@@ -13,6 +13,7 @@ namespace ConsolePlus.Domain
         {
             _window = window;
             _process = process;
+
             SetBackgroundWorker();
             History = new CommandHistory();
         }
@@ -28,16 +29,19 @@ namespace ConsolePlus.Domain
 
         private void ReadOutput(BackgroundWorker worker)
         {
-            int count;
-            var buffer = new char[1024];
-            do
-            {
-                var builder = new StringBuilder();
-                count = _process.Read(buffer, 0, 1024);
-                builder.Append(buffer, 0, count);
-                worker.ReportProgress(0, builder.ToString());
 
-            } while (count > 0);
+//            int count;
+//            var buffer = new char[1024];
+//            do
+//            {
+//                var builder = new StringBuilder();
+//                count = _process.Read(buffer, 0, 1024);
+//                builder.Append(buffer, 0, count);
+//                worker.ReportProgress(0, builder.ToString());
+//
+//            } while (count > 0);
+
+            worker.ReportProgress(0, _process.Read1());
         }
 
         public void Start()
