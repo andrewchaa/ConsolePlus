@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using ConsolePlus.Infrastructure;
+using Microsoft.Win32.SafeHandles;
 using NUnit.Framework;
 
 namespace ConsolePlus.Test
@@ -21,25 +22,20 @@ namespace ConsolePlus.Test
             process.Start();
 
             WinCon.AttachConsole(process.Id);
-
-            IntPtr hConsoleOutput = WinCon.GetStdHandle(WinCon.STD_OUTPUT_HANDLE);
+                   
             
-            using (ConsoleScreenBuffer buffer = JConsole.GetActiveScreenBuffer())
-            {
-//                buffer.SetBufferSize(100, 100);
-//                buffer.SetWindowSize(buffer.MaximumWindowWidth, buffer.MaximumWindowHeight);
 
+//            using (ConsoleScreenBuffer buffer = JConsole.GetActiveScreenBuffer())
+            using (var buffer = new ConsoleScreenBuffer())
+            {
+                JConsole.SetActiveScreenBuffer(buffer);
                 buffer.WriteLine("dir");
 
                 var block = new ConsoleCharInfo[buffer.Height,buffer.Width];
                 buffer.ReadBlock(block, 0, 0, 0, 0, buffer.Height, buffer.Width);
+
+
             }
-
-//            var bufferInfo = new ConsoleScreenBufferInfo();
-//            WinCon.GetConsoleScreenBufferInfo(hConsoleOutput, bufferInfo);
-//            WinCon.SetConsoleScreenBufferSize(hConsoleOutput, new Coord(200, 200));
-
-            
         }
 
     }

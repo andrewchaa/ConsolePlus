@@ -14,9 +14,8 @@ namespace ConsolePlus.Infrastructure
 
         // Flag indicates whether the object owns the handle.
         // If true, the handle is closed when the object is disposed.
-        internal bool ownsHandle = false;
+        public bool ownsHandle = false;
 
-        #region Construction and destruction
         /// <summary>
         /// Create a new instance of the ConsoleScreenBuffer class by creating a new
         /// console screen buffer handle.
@@ -40,7 +39,7 @@ namespace ConsolePlus.Infrastructure
         /// Create a new instance of the ConsoleScreenBuffer class from a passed handle.
         /// </summary>
         /// <param name="handle">Handle to an existing Windows console screen buffer.</param>
-        internal ConsoleScreenBuffer(IntPtr handle)
+        public ConsoleScreenBuffer(IntPtr handle)
         {
             this.handle = handle;
             ownsHandle = false;
@@ -51,7 +50,6 @@ namespace ConsolePlus.Infrastructure
             Dispose(false);
         }
 
-        #region IDisposable Members
 
         private bool disposed = false;
         public void Dispose()
@@ -77,12 +75,6 @@ namespace ConsolePlus.Infrastructure
             disposed = true;
         }
 
-        #endregion
-
-        #endregion
-
-        #region Miscellaneous
-
         /// <summary>
         /// Gets the Windows screen buffer handle.
         /// </summary>
@@ -107,9 +99,6 @@ namespace ConsolePlus.Infrastructure
             return csbi;
         }
 
-        #endregion
-
-        #region Cursor
 
         /// <summary>
         /// Gets or sets the height of the console cursor, expressed as a percentage of
@@ -195,10 +184,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Screen buffer size
-
         /// <summary>
         /// Gets or sets the height (in character rows) of the console screen buffer.
         /// </summary>
@@ -236,9 +221,6 @@ namespace ConsolePlus.Infrastructure
                 throw new IOException("Unable to set screen buffer size", Marshal.GetLastWin32Error());
             }
         }
-        #endregion
-
-        #region Screen buffer window
 
         /// <summary>
         /// Gets or sets the screen buffer window height in character rows.
@@ -378,9 +360,6 @@ namespace ConsolePlus.Infrastructure
         {
             get { return GetScreenBufferInfo().dwMaximumWindowSize; }
         }
-        #endregion
-
-        #region Scrolling
 
         /// <summary>
         /// Copies a specified source area of the screen buffer to a specified destination area.
@@ -440,9 +419,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Console Mode and Display Mode
 
         private bool GetModeFlag(ConsoleOutputModeFlags flag)
         {
@@ -546,9 +522,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Foreground and Background Color
 
         /// <summary>
         /// Gets or sets the foreground color used to write characters.
@@ -600,9 +573,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Font
 
         // There are two font functions.
         // GetCurrentConsoleFont returns a ConsoleFontInfo class that
@@ -630,9 +600,6 @@ namespace ConsolePlus.Infrastructure
             return cfi.dwFontSize;
         }
 
-        #endregion
-
-        #region Fill and Clear
 
         /// <summary>
         /// Fills character attributes at a given cursor position.
@@ -721,9 +688,6 @@ namespace ConsolePlus.Infrastructure
             SetCursorPosition(0, 0);
         }
 
-        #endregion
-
-        #region Writing
 
         /// <summary>
         /// Writes a string at the current cursor position.
@@ -858,10 +822,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Reading
-
         /// <summary>
         /// Reads characters from the screen buffer, starting at the given position.
         /// </summary>
@@ -940,6 +900,5 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
     }
 }

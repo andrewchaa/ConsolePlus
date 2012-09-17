@@ -46,15 +46,12 @@ namespace ConsolePlus.Infrastructure
     /// <param name="e">A <see cref="ConsoleControlEventArgs"/> that contains the event data.</param>
     public delegate void ConsoleControlEventHandler(object sender, ConsoleControlEventArgs e);
 
-    #region JConsole class
     /// <summary>
 	/// Provides an enhanced interface to the Windows console.  Intended to be used
     /// in conjunction with the System.Console class.
 	/// </summary>
 	public sealed class JConsole
     {
-        #region Constructors
-
         private JConsole()
 		{
 			// private constructor prevents instantiation
@@ -73,9 +70,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
-
-        #region Attaching and detaching
 
         /// <summary>
         /// Allocate a new console for the calling process.
@@ -146,9 +140,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-		#endregion
-
-		#region Miscellaneous
 
 		/// <summary>
 		/// Gets the window handle of the attached console
@@ -196,9 +187,6 @@ namespace ConsolePlus.Infrastructure
 			} while (true);
 		}
 
-		#endregion
-
-		#region Aliases
 
         /// <summary>
         /// Add a console alias string and target text.
@@ -356,9 +344,6 @@ namespace ConsolePlus.Infrastructure
 		{
 			return WinCon.GetConsoleAliasExesLength();
 		}
-		#endregion
-
-        #region Control events
 
 
         /// <summary>
@@ -401,9 +386,6 @@ namespace ConsolePlus.Infrastructure
 				throw new IOException("Error generating event.", Marshal.GetLastWin32Error());
 			}
 		}
-        #endregion
-
-        #region Screen buffers
 
         /// <summary>
         /// Opens the currently active screen buffer.
@@ -429,9 +411,8 @@ namespace ConsolePlus.Infrastructure
             {
                 throw new IOException("Unable to open CONOUT$", Marshal.GetLastWin32Error());
             }
-            ConsoleScreenBuffer sb = new ConsoleScreenBuffer(outHandle);
-            sb.ownsHandle = true;
-            return sb;
+            
+            return new ConsoleScreenBuffer(outHandle) {ownsHandle = true};
         }
 
         /// <summary>
@@ -445,9 +426,6 @@ namespace ConsolePlus.Infrastructure
                 throw new IOException("Error setting active screen buffer.", Marshal.GetLastWin32Error());
             }
         }
-        #endregion
-
-        #region Input buffer
 
         /// <summary>
         /// Opens the screen buffer.
@@ -474,9 +452,6 @@ namespace ConsolePlus.Infrastructure
 
             return inputBuffer;
         }
-        #endregion
-
-        #region Standard handles
 
         /// <summary>
         /// Gets a value indicating whether the standard input handle is redirected.
@@ -558,8 +533,6 @@ namespace ConsolePlus.Infrastructure
             return (WinApi.GetFileType(handle) == WinApi.FILE_TYPE_CHAR);
         }
 
-        #endregion
     }
 
-    #endregion
 }
