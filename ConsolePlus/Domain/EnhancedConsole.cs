@@ -53,7 +53,7 @@ namespace ConsolePlus.Domain
 
         public void Write(string command)
         {
-            _process.Write(command); 
+//            _process.Write(command); 
             History.Add(command);
         }
     }
