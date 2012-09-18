@@ -5,6 +5,7 @@ using System.Timers;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ConsolePlus.Domain;
+using ConsolePlus.Infrastructure;
 
 namespace ConsolePlus
 {
@@ -47,33 +48,19 @@ namespace ConsolePlus
             tbxConsole.SelectionLength = 0;
         }
 
-        private void TbxConsoleKeyDown(object sender, KeyEventArgs e)
-        {
-            string character = e.Key.ToString().ToLower();
-            
-            if (e.Key == Key.Return)
-            {
-                character = Convert.ToChar(13).ToString();
-            } 
-            else if (e.Key == Key.Space)
-            {
-                character = Convert.ToChar(32).ToString();
-            }
-                
-            _console.WriteLine(character);
-        }
-
         private void tbxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Up)
-            {
-                var commandText = _command.Parse(tbxConsole.GetLineText(tbxConsole.LineCount - 1));
-                tbxConsole.Text = tbxConsole.Text.Substring(0, tbxConsole.Text.Length - commandText.UserCommand.Length) +
-                    _console.History.Get();
+//            string character = e.Key.ToString().ToLower();
+//            if (e.Key == Key.Return)
+//            {
+//                character = Convert.ToChar(13).ToString();
+//            } 
+//            else if (e.Key == Key.Space)
+//            {
+//                character = Convert.ToChar(32).ToString();
+//            }
 
-                MoveCursorToTheEnd();
-                e.Handled = true;
-            } 
+            _console.WriteLine(KeyHelper.GetCharFromKey(e.Key).ToString());
         }
 
     }

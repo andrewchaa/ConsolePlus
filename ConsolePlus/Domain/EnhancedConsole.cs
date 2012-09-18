@@ -59,7 +59,8 @@ namespace ConsolePlus.Domain
                     emptyLineCount++;
                     if (emptyLineCount >= 2)
                         break;
-                    
+
+                    builder.AppendLine(string.Empty);
                     continue;
                 }
 
