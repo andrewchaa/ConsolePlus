@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text;
 using ConsolePlus.Infrastructure;
 
@@ -17,7 +18,7 @@ namespace ConsolePlus.Domain
 //                ErrorDialog = false,
 //                CreateNoWindow = true,
 //                RedirectStandardError = true,
-                RedirectStandardInput = true,
+//                RedirectStandardInput = true,
 //                RedirectStandardOutput = true
             };
 
@@ -57,7 +58,35 @@ namespace ConsolePlus.Domain
 
         public void Write(string command)
         {
-            _process.StandardInput.Write(command); 
+            var buffer = JConsole.GetActiveScreenBuffer();
+
+            var ea = new EventArgs[8];
+            ea[0] = MakeKeyEvent('d', ConsoleKey.D, 35, true);
+            ea[1] = MakeKeyEvent('d', ConsoleKey.D, 35, false);
+            ea[2] = MakeKeyEvent('i', ConsoleKey.I, 18, true);
+            ea[3] = MakeKeyEvent('i', ConsoleKey.I, 18, false);
+            ea[4] = MakeKeyEvent('r', ConsoleKey.R, 38, true);
+            ea[5] = MakeKeyEvent('r', ConsoleKey.R, 38, false);
+            ea[6] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, 28, true);
+            ea[7] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, 28, false);
+
+            var inputBuffer = JConsole.GetInputBuffer();
+            inputBuffer.WindowInput = true;
+            inputBuffer.WriteEvents(ea);
         }
+
+        private ConsoleKeyEventArgs MakeKeyEvent(char keyChar, ConsoleKey key, int scanCode, bool keyDown)
+        {
+            var eKey = new ConsoleKeyEventArgs
+                           {
+                               KeyDown = keyDown,
+                               RepeatCount = 1,
+                               KeyChar = keyChar,
+                               Key = key,
+                               VirtualScanCode = scanCode
+                           };
+            return eKey;
+        }
+
     }
 }

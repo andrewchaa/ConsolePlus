@@ -16,6 +16,7 @@ namespace ConsolePlus.Test
         {
             var mockWindow = new Mock<IConsoleWindow>();
             var console = new EnhancedConsole(mockWindow.Object, new ConsoleProcess());
+            console.Start();
 
             console.Write("dir");
 

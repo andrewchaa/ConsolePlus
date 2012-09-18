@@ -43,18 +43,18 @@ namespace ConsolePlus.Test
             var buffer = JConsole.GetActiveScreenBuffer();
             
             var ea = new EventArgs[12];
-            ea[0] = MakeKeyEvent('H', ConsoleKey.H, 35, true);
-            ea[1] = MakeKeyEvent('H', ConsoleKey.H, 35, false);
-            ea[2] = MakeKeyEvent('e', ConsoleKey.E, 18, true);
-            ea[3] = MakeKeyEvent('e', ConsoleKey.E, 18, false);
-            ea[4] = MakeKeyEvent('l', ConsoleKey.L, 38, true);
-            ea[5] = MakeKeyEvent('l', ConsoleKey.L, 38, false);
-            ea[6] = MakeKeyEvent('l', ConsoleKey.L, 38, true);
-            ea[7] = MakeKeyEvent('l', ConsoleKey.L, 38, false);
-            ea[8] = MakeKeyEvent('o', ConsoleKey.O, 24, true);
-            ea[9] = MakeKeyEvent('o', ConsoleKey.O, 24, false);
-            ea[10] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, 28, true);
-            ea[11] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, 28, false);
+            ea[0] = MakeKeyEvent('H', ConsoleKey.H, true);
+            ea[1] = MakeKeyEvent('H', ConsoleKey.H, false);
+            ea[2] = MakeKeyEvent('e', ConsoleKey.E, true);
+            ea[3] = MakeKeyEvent('e', ConsoleKey.E, false);
+            ea[4] = MakeKeyEvent('l', ConsoleKey.L, true);
+            ea[5] = MakeKeyEvent('l', ConsoleKey.L, false);
+            ea[6] = MakeKeyEvent('l', ConsoleKey.L, true);
+            ea[7] = MakeKeyEvent('l', ConsoleKey.L, false);
+            ea[8] = MakeKeyEvent('o', ConsoleKey.O, true);
+            ea[9] = MakeKeyEvent('o', ConsoleKey.O, false);
+            ea[10] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, true);
+            ea[11] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, false);
 
             var inputBuffer = JConsole.GetInputBuffer();
             inputBuffer.WindowInput = true;
@@ -63,17 +63,14 @@ namespace ConsolePlus.Test
 
         }
 
-        static ConsoleKeyEventArgs MakeKeyEvent(char keyChar, ConsoleKey key, int scanCode, bool keyDown)
+        static ConsoleKeyEventArgs MakeKeyEvent(char keyChar, ConsoleKey key, bool keyDown)
         {
-            ConsoleKeyEventArgs eKey = new ConsoleKeyEventArgs();
+            var eKey = new ConsoleKeyEventArgs();
             eKey.KeyDown = keyDown;
             eKey.RepeatCount = 1;
             eKey.KeyChar = keyChar;
             eKey.Key = key;
-            eKey.VirtualScanCode = scanCode;
             return eKey;
         }
-
-
     }
 }
