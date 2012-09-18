@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Timers;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ConsolePlus.Domain;
 
 namespace ConsolePlus
@@ -8,27 +11,32 @@ namespace ConsolePlus
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : IConsoleWindow
+    public partial class MainWindow
     {
         private readonly EnhancedConsole _console;
         private readonly IParse _command;
+        private DispatcherTimer _timer;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _command = new CommandParser();
-            _console = new EnhancedConsole(this, new ConsoleProcess());
+            _console = new EnhancedConsole();
             _console.Start();
-        }
 
-        public void UpdateConsole(ProgressChangedEventArgs args)
-        {
-            if (!(args.UserState is string)) return;
-            
-            tbxConsole.Text += args.UserState;
-
+            Thread.Sleep(200);
+            tbxConsole.Text = _console.ReadAll();
             MoveCursorToTheEnd();
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(1000);
+            _timer.Tick += (o, args) =>
+                                  {
+                                      tbxConsole.Text = _console.ReadAll();
+                                      MoveCursorToTheEnd();
+                                  };
+            _timer.IsEnabled = true;
         }
 
         private void MoveCursorToTheEnd()
@@ -41,13 +49,18 @@ namespace ConsolePlus
 
         private void TbxConsoleKeyDown(object sender, KeyEventArgs e)
         {
+            string character = e.Key.ToString().ToLower();
+            
             if (e.Key == Key.Return)
             {
-                var commandText = _command.Parse(tbxConsole.GetLineText(tbxConsole.LineCount - 1));
-                
-                _console.Write(commandText.UserCommand + Environment.NewLine);
-                tbxConsole.Text = tbxConsole.Text.Substring(0, tbxConsole.Text.Length - commandText.UserCommand.Length);
+                character = Convert.ToChar(13).ToString();
+            } 
+            else if (e.Key == Key.Space)
+            {
+                character = Convert.ToChar(32).ToString();
             }
+                
+            _console.WriteLine(character);
         }
 
         private void tbxConsole_PreviewKeyDown(object sender, KeyEventArgs e)

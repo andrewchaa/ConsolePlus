@@ -1025,9 +1025,6 @@ namespace ConsolePlus.Infrastructure
         public static extern bool AllocConsole();
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AttachConsole(int dwProcessId);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr CreateConsoleScreenBuffer(
             int dwDesiredAccess,
             int dwShareMode,

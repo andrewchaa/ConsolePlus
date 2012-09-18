@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using ConsolePlus.Domain;
 using ConsolePlus.Infrastructure;
 using Microsoft.Win32.SafeHandles;
 using NUnit.Framework;
@@ -21,7 +22,6 @@ namespace ConsolePlus.Test
         {
             _process = new Process { StartInfo = { FileName = "cmd.exe" } };
             _process.Start();
-            WinCon.AttachConsole(_process.Id);
         }
 
         [Test]
@@ -42,23 +42,23 @@ namespace ConsolePlus.Test
         {
             var buffer = JConsole.GetActiveScreenBuffer();
             
-            var ea = new EventArgs[12];
-            ea[0] = MakeKeyEvent('H', ConsoleKey.H, true);
-            ea[1] = MakeKeyEvent('H', ConsoleKey.H, false);
-            ea[2] = MakeKeyEvent('e', ConsoleKey.E, true);
-            ea[3] = MakeKeyEvent('e', ConsoleKey.E, false);
-            ea[4] = MakeKeyEvent('l', ConsoleKey.L, true);
-            ea[5] = MakeKeyEvent('l', ConsoleKey.L, false);
-            ea[6] = MakeKeyEvent('l', ConsoleKey.L, true);
-            ea[7] = MakeKeyEvent('l', ConsoleKey.L, false);
-            ea[8] = MakeKeyEvent('o', ConsoleKey.O, true);
-            ea[9] = MakeKeyEvent('o', ConsoleKey.O, false);
-            ea[10] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, true);
-            ea[11] = MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, false);
+            var events = new List<EventArgs>();
+            events.Add(MakeKeyEvent('H', ConsoleKey.H, true));
+            events.Add(MakeKeyEvent('H', ConsoleKey.H, false));
+            events.Add(MakeKeyEvent('e', ConsoleKey.E, true));
+            events.Add(MakeKeyEvent('e', ConsoleKey.E, false));
+            events.Add(MakeKeyEvent('l', ConsoleKey.L, true));
+            events.Add(MakeKeyEvent('l', ConsoleKey.L, false));
+            events.Add(MakeKeyEvent('l', ConsoleKey.L, true));
+            events.Add(MakeKeyEvent('l', ConsoleKey.L, false));
+            events.Add(MakeKeyEvent('o', ConsoleKey.O, true));
+            events.Add(MakeKeyEvent('o', ConsoleKey.O, false));
+            events.Add(MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, true));
+            events.Add(MakeKeyEvent(Convert.ToChar(13), ConsoleKey.Enter, false));
 
             var inputBuffer = JConsole.GetInputBuffer();
             inputBuffer.WindowInput = true;
-            inputBuffer.WriteEvents(ea);
+            inputBuffer.WriteEvents(events, events.Count());
 
 
         }

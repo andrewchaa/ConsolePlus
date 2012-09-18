@@ -7,7 +7,6 @@ using System.Text;
 
 namespace ConsolePlus.Infrastructure
 {
-    #region Key Event
 
     /// <summary>
     /// Holds data for the ConsoleKey event.
@@ -66,15 +65,6 @@ namespace ConsolePlus.Infrastructure
         }
 
         /// <summary>
-        /// Gets or sets the hardware-dependent virtual scan code.
-        /// </summary>
-        public int VirtualScanCode
-        {
-            get { return virtualScanCode; }
-            set { virtualScanCode = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the Unicode character for this key event.
         /// </summary>
         public char KeyChar
@@ -109,9 +99,6 @@ namespace ConsolePlus.Infrastructure
     /// <param name="e">A <see cref="ConsoleKeyEventArgs"/> that contains the event data.</param>
     public delegate void ConsoleKeyEventHandler(object sender, ConsoleKeyEventArgs e);
 
-    #endregion
-
-    #region Mouse Event
 
     public class ConsoleMouseEventArgs : EventArgs
     {
@@ -172,9 +159,7 @@ namespace ConsolePlus.Infrastructure
     }
 
     public delegate void ConsoleMouseEventHandler(object sender, ConsoleMouseEventArgs e);
-    #endregion
 
-    #region Window Buffer Size Event
 
     public class ConsoleWindowBufferSizeEventArgs : EventArgs
     {
@@ -208,7 +193,6 @@ namespace ConsolePlus.Infrastructure
 
     public delegate void ConsoleBufferSizeEventHandler(object sender, ConsoleWindowBufferSizeEventArgs e);
 
-    #endregion
 
     public class ConsoleFocusEventArgs : EventArgs
     {
@@ -254,7 +238,6 @@ namespace ConsolePlus.Infrastructure
         private IntPtr handle = IntPtr.Zero;
         internal bool ownsHandle = false;
 
-        #region Construction and destruction
         // Constructor is marked internal because external programs
         // shouldn't ever need to create a ConsoleInputBuffer.
         internal ConsoleInputBuffer(IntPtr aHandle)
@@ -263,7 +246,6 @@ namespace ConsolePlus.Infrastructure
             ownsHandle = false;
         }
 
-        #region IDisposable Members
 
 
         private bool disposed = false;
@@ -291,20 +273,17 @@ namespace ConsolePlus.Infrastructure
             disposed = true;
         }
 
-        #endregion
 
         ~ConsoleInputBuffer()
         {
             Dispose(false);
         }
-        #endregion
 
         public IntPtr Handle
         {
             get { return handle; }
         }
 
-        #region Input Mode
 
         private bool GetModeFlag(ConsoleInputModeFlags flag)
         {
@@ -444,7 +423,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
 
         public void Flush()
         {
@@ -477,7 +455,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #region Selection
         private ConsoleSelectionInfo GetSelectionInfo()
         {
             ConsoleSelectionInfo csi = new ConsoleSelectionInfo();
@@ -507,9 +484,6 @@ namespace ConsolePlus.Infrastructure
             get { return GetSelectionInfo().srSelection; }
         }
 
-        #endregion
-
-        #region KeyAvailable and ReadKey
         /// <summary>
         /// Get a value indicating whether a key is available at the console.
         /// </summary>
@@ -598,9 +572,6 @@ namespace ConsolePlus.Infrastructure
                 (keyEvent.ControlKeyState & (ConsoleControlKeyState.RightAltPressed | ConsoleControlKeyState.LeftAltPressed)) != 0,
                 (keyEvent.ControlKeyState & (ConsoleControlKeyState.RightCtrlPressed | ConsoleControlKeyState.LeftCtrlPressed)) != 0);
         }
-        #endregion
-
-        #region Read and ReadLine
 
         // Buffer for Read and ReadLine input
         private StringBuilder sBuffer = new StringBuilder();
@@ -666,9 +637,6 @@ namespace ConsolePlus.Infrastructure
             iString++;
             return ret;
         }
-        #endregion
-
-        #region Peek, Read, Write
 
         /// <summary>
         /// Get the number of events currently waiting in the input buffer.
@@ -771,14 +739,14 @@ namespace ConsolePlus.Infrastructure
             return eventsWritten;
         }
 
-        public void WriteEvents(EventArgs[] events, int nEvents)
+        public void WriteEvents(IList<EventArgs> events, int nEvents)
         {
             // convert EventArgs to ConsoleInputEventInfo structures.
             var consoleEvents = new ConsoleInputEventInfo[nEvents];
             for (int i = 0; i < nEvents; i++)
             {
-                EventArgs e = events[i];
-                ConsoleInputEventInfo ce = new ConsoleInputEventInfo();
+                var e = events[i];
+                var ce = new ConsoleInputEventInfo();
 
                 if (e is ConsoleKeyEventArgs)
                 {
@@ -789,7 +757,6 @@ namespace ConsolePlus.Infrastructure
                     ce.KeyEvent.KeyDown = eKey.KeyDown;
                     ce.KeyEvent.RepeatCount = (short)eKey.RepeatCount;
                     ce.KeyEvent.VirtualKeyCode = eKey.Key;
-                    ce.KeyEvent.VirtualScanCode = (short)eKey.VirtualScanCode;
                 }
                 else if (e is ConsoleMouseEventArgs)
                 {
@@ -824,17 +791,10 @@ namespace ConsolePlus.Infrastructure
                 }
                 consoleEvents[i] = ce;
             }
+            
             WriteEvents(consoleEvents, consoleEvents.Length);
         }
 
-        public void WriteEvents(EventArgs[] events)
-        {
-            WriteEvents(events, events.Length);
-        }
-
-        #endregion
-
-        #region Events
 
         public event ConsoleKeyEventHandler KeyDown;
         public event ConsoleKeyEventHandler KeyUp;
@@ -978,7 +938,6 @@ namespace ConsolePlus.Infrastructure
             }
         }
 
-        #endregion
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Runtime.InteropServices;
+using ConsolePlus.Domain;
 
 namespace ConsolePlus.Infrastructure
 {
@@ -92,15 +93,15 @@ namespace ConsolePlus.Infrastructure
         /// Attach the calling process to the console of the specified process.
         /// </summary>
         /// <param name="processId">Identifier of the process whose console will be attached.</param>
-		public static void AttachConsole(int processId)
-		{
-			if (!WinCon.AttachConsole(processId))
-			{
-                int err = Marshal.GetLastWin32Error();
-				throw new IOException(String.Format("Unable to attach console 0x{0,X}", processId), err);
-			}
-            SetupControlHandler();
-		}
+//		public static void AttachConsole(int processId)
+//		{
+//			if (!AttachConsole(processId))
+//			{
+//                int err = Marshal.GetLastWin32Error();
+//				throw new IOException(String.Format("Unable to attach console 0x{0,X}", processId), err);
+//			}
+//            SetupControlHandler();
+//		}
 
         /// <summary>
         /// Detaches the calling process from its console.
@@ -437,12 +438,12 @@ namespace ConsolePlus.Infrastructure
         static public ConsoleInputBuffer GetInputBuffer()
         {
             IntPtr inHandle = WinApi.CreateFile("CONIN$",
-                WinApi.GENERIC_READ | WinApi.GENERIC_WRITE,
-                WinApi.FILE_SHARE_READ | WinApi.FILE_SHARE_WRITE,
+                WinApi.GENERIC_READ | WinApi.GENERIC_WRITE, WinApi.FILE_SHARE_READ | WinApi.FILE_SHARE_WRITE, 
                 null,
                 WinApi.OPEN_EXISTING,
                 0,
                 IntPtr.Zero);
+            
             if (inHandle.ToInt32() == WinApi.INVALID_HANDLE_VALUE)
             {
                 throw new IOException("Unable to open CONIN$", Marshal.GetLastWin32Error());

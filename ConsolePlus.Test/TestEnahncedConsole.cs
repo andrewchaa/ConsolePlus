@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using ConsolePlus.Domain;
 using Moq;
 using NUnit.Framework;
@@ -11,16 +9,22 @@ namespace ConsolePlus.Test
     [TestFixture]
     public class TestEnahncedConsole
     {
+        private EnhancedConsole _console;
+
         [Test]
-        public void Should_Write_Typed_Commands_To_Console_And_Execute_It()
+        public void Should_Read_Output()
         {
-            var mockWindow = new Mock<IConsoleWindow>();
-            var console = new EnhancedConsole(mockWindow.Object, new ConsoleProcess());
-            console.Start();
+            _console = new EnhancedConsole();
+            _console.Start();
 
-            console.Write("dir");
+            Assert.That(_console.ReadAll(), Is.Not.Null, "Output is null");
+            Assert.That(_console.ReadAll(), Contains.Substring(Environment.NewLine), "Newline character is not present");
 
-            
+            _console.WriteLine("dir");
+            Assert.That(_console.ReadAll(), Contains.Substring("dir"), "user command doesn't exist");
+
+            _console.WriteLine("exit");
         }
+
     }
 }
