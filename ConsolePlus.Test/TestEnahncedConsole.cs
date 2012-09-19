@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using ConsolePlus.Domain;
 using Moq;
@@ -9,7 +10,6 @@ namespace ConsolePlus.Test
     [TestFixture]
     public class TestEnahncedConsole
     {
-        
 
         [Test]
         public void Should_Read_Output()
@@ -23,29 +23,17 @@ namespace ConsolePlus.Test
             console.Write('d');
             console.Write('i');
             console.Write('r');
+            console.Write((char)13);
+
             Assert.That(console.ReadAll(), Contains.Substring("dir"), "user command doesn't exist");
 
             console.Write('e');
             console.Write('x');
             console.Write('i');
             console.Write('t');
+            console.Write((char)13);
         }
 
-        [Test]
-        public void Should_Write_Login_Credentials_Correctly()
-        {
-            var console = new EnhancedConsole();
-            console.Start();
-
-//            console.Write("cd .." + Convert.ToChar(13).ToString());
-//            console.Write("cd .." + Convert.ToChar(13).ToString());
-//            console.Write("cd .." + Convert.ToChar(13).ToString());
-//            console.Write("git push origin master" + Convert.ToChar(13).ToString());
-//            console.Write("andrewchaa" + Convert.ToChar(13).ToString());
-
-            Thread.Sleep(1000);
-//            console.Write("exit" + Convert.ToChar(13).ToString());
-        }
 
     }
 }

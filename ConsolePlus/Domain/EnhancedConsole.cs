@@ -41,47 +41,26 @@ namespace ConsolePlus.Domain
 
         public string ReadAll()
         {
-            
-//            return _process.ReadAll(_process.Id);
             AttachConsole(_process.Id);
-            var outputBuffer = JConsole.GetActiveScreenBuffer();
+            var buffer = JConsole.GetActiveScreenBuffer();
 
-            var block = new ConsoleCharInfo[outputBuffer.Height, outputBuffer.Width];
-            outputBuffer.ReadBlock(block, 0, 0, 0, 0, outputBuffer.Height, outputBuffer.Width);
+            int height = buffer.CursorTop + 1;
+            int width = buffer.Width;
 
-            int emptyLineCount = 0;
-            var builder = new StringBuilder(outputBuffer.Width);
-            for (int line = 0; line < outputBuffer.Height; line++)
+            var block = new ConsoleCharInfo[height, width];
+            buffer.ReadBlock(block, 0, 0, 0, 0, width, height);
+
+            var builder = new StringBuilder(height * width);
+            for (int line = 0; line < height; line++)
             {
-                string text = ReadLine(line, block, outputBuffer);
-                if (text.Length == 0)
+                builder.Append(Environment.NewLine);
+                for (int i = 0; i < width; i++)
                 {
-                    emptyLineCount++;
-                    if (emptyLineCount >= 2)
-                        break;
-
-                    builder.AppendLine(string.Empty);
-                    continue;
+                    builder.Append(block[line, i].UnicodeChar);
                 }
-
-                builder.AppendLine(text);
-                emptyLineCount = 0;
             }
 
-            return builder.ToString().TrimEnd('\r', '\n');
-
-        }
-
-        private string ReadLine(int line, ConsoleCharInfo[,] block, ConsoleScreenBuffer buffer)
-        {
-            var stringBuilder = new StringBuilder(buffer.Width);
-
-            for (int i = 0; i < buffer.Width; i++)
-            {
-                stringBuilder.Append(block[line, i].UnicodeChar);
-            }
-
-            return stringBuilder.ToString().TrimEnd();
+            return builder.ToString();
         }
 
         public void Write(char key)

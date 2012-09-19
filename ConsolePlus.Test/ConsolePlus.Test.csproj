@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestConsoleHandle.cs" />
+    <Compile Include="TestConsoleApi.cs" />
     <Compile Include="TestCommandHistory.cs" />
     <Compile Include="TestCommandParsing.cs" />
     <Compile Include="TestEnahncedConsole.cs" />
