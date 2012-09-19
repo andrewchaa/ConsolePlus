@@ -55,6 +55,10 @@ namespace ConsolePlus
             {
                 key = Convert.ToChar(13);
             } 
+            else if (e.Key == Key.LeftShift)
+            {
+                return;
+            }
 
             _console.Write(key);
         }
