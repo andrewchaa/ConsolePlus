@@ -60,7 +60,7 @@ namespace ConsolePlus
 //                character = Convert.ToChar(32).ToString();
 //            }
 
-            _console.WriteLine(KeyHelper.GetCharFromKey(e.Key).ToString());
+            _console.Write(KeyHelper.GetCharFromKey(e.Key).ToString());
         }
 
     }

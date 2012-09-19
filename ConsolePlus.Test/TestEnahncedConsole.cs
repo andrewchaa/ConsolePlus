@@ -9,21 +9,33 @@ namespace ConsolePlus.Test
     [TestFixture]
     public class TestEnahncedConsole
     {
-        private EnhancedConsole _console;
+        
 
         [Test]
         public void Should_Read_Output()
         {
-            _console = new EnhancedConsole();
-            _console.Start();
+            var console = new EnhancedConsole();
+            console.Start();
 
-            Assert.That(_console.ReadAll(), Is.Not.Null, "Output is null");
-            Assert.That(_console.ReadAll(), Contains.Substring(Environment.NewLine), "Newline character is not present");
+            Assert.That(console.ReadAll(), Is.Not.Null, "Output is null");
+            Assert.That(console.ReadAll(), Contains.Substring(Environment.NewLine), "Newline character is not present");
 
-            _console.WriteLine("dir");
-            Assert.That(_console.ReadAll(), Contains.Substring("dir"), "user command doesn't exist");
+            console.Write("dir");
+            Assert.That(console.ReadAll(), Contains.Substring("dir"), "user command doesn't exist");
 
-            _console.WriteLine("exit");
+            console.Write("exit");
+        }
+
+        [Test]
+        public void Should_Write_Login_Credentials_Correctly()
+        {
+            var console = new EnhancedConsole();
+            console.Start();
+
+            console.Write("dir" + Convert.ToChar(13).ToString());
+
+            Thread.Sleep(1000);
+//            console.Write("exit" + Convert.ToChar(13).ToString());
         }
 
     }

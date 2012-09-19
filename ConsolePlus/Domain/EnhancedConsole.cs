@@ -84,7 +84,7 @@ namespace ConsolePlus.Domain
             return stringBuilder.ToString().TrimEnd();
         }
 
-        public void WriteLine(string command)
+        public void Write(string command)
         {
             WriteEventsToConsoleProcess(command);
             History.Add(command);
