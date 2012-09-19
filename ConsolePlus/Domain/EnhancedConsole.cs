@@ -84,21 +84,20 @@ namespace ConsolePlus.Domain
             return stringBuilder.ToString().TrimEnd();
         }
 
-        public void Write(string command)
+        public void Write(char key)
         {
-            WriteEventsToConsoleProcess(command);
-            History.Add(command);
+            WriteEventsToConsoleProcess(key);
+//            History.Add(key);
         }
 
 
-        private void WriteEventsToConsoleProcess(string command)
+        private void WriteEventsToConsoleProcess(char key)
         {
-            var events = new List<EventArgs>();
-            foreach (var character in command)
-            {
-                events.Add(new ConsoleKeyEventArgs {KeyChar = character, KeyDown = true, RepeatCount = 1});
-                events.Add(new ConsoleKeyEventArgs {KeyChar = character, KeyDown = false, RepeatCount = 1});
-            }
+            var events = new List<EventArgs>
+                             {
+                                 new ConsoleKeyEventArgs {KeyChar = key, KeyDown = true, RepeatCount = 1},
+                                 new ConsoleKeyEventArgs {KeyChar = key, KeyDown = false, RepeatCount = 1}
+                             };
 
             var inputBuffer = JConsole.GetInputBuffer();
             inputBuffer.WindowInput = true;

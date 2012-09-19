@@ -31,7 +31,7 @@ namespace ConsolePlus
             MoveCursorToTheEnd();
 
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(1000);
+            _timer.Interval = TimeSpan.FromMilliseconds(500);
             _timer.Tick += (o, args) =>
                                   {
                                       tbxConsole.Text = _console.ReadAll();
@@ -50,17 +50,13 @@ namespace ConsolePlus
 
         private void tbxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-//            string character = e.Key.ToString().ToLower();
-//            if (e.Key == Key.Return)
-//            {
-//                character = Convert.ToChar(13).ToString();
-//            } 
-//            else if (e.Key == Key.Space)
-//            {
-//                character = Convert.ToChar(32).ToString();
-//            }
+            char key = KeyHelper.GetCharFromKey(e.Key);
+            if (e.Key == Key.Return)
+            {
+                key = Convert.ToChar(13);
+            } 
 
-            _console.Write(KeyHelper.GetCharFromKey(e.Key).ToString());
+            _console.Write(key);
         }
 
     }
