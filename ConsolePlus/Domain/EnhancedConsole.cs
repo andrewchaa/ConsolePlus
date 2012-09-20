@@ -47,6 +47,10 @@ namespace ConsolePlus.Domain
             int height = buffer.CursorTop + 1;
             int width = buffer.Width;
 
+            Console.WriteLine(buffer.CursorTop);
+            Console.WriteLine(buffer.OutputMode.ToString());
+            Console.WriteLine(buffer.ProcessedOutput);
+
             var block = new ConsoleCharInfo[height, width];
             buffer.ReadBlock(block, 0, 0, 0, 0, width, height);
 
