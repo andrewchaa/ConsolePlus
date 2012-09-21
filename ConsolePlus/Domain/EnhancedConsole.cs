@@ -10,51 +10,69 @@ namespace ConsolePlus.Domain
     public class EnhancedConsole
     {
         private readonly Process _process;
+        private ConsoleScreenBuffer _outputBuffer;
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool AttachConsole(int dwProcessId);
 
         public EnhancedConsole()
         {
-            var info = new ProcessStartInfo("cmd.exe", String.Empty)
-            {
-                //                UseShellExecute = false,
-                //                ErrorDialog = false,
-                //                CreateNoWindow = true,
-                //                RedirectStandardError = true,
-                //                RedirectStandardInput = true,
-                //                RedirectStandardOutput = true
-            };
+            _process = new Process
+                           {
+                               EnableRaisingEvents = true,
+                               StartInfo = new ProcessStartInfo("cmd.exe", String.Empty) 
+                                               {
+                                                   //                                UseShellExecute = false,
+                                                   //                                ErrorDialog = false,
+                                                   //                                CreateNoWindow = true
+                                               }
+                           };
 
-            _process = new Process { EnableRaisingEvents = true, StartInfo = info, };
-            
             History = new CommandHistory();
         }
 
         public CommandHistory History { get; private set; }
 
+        public int CurrentLine
+        {
+            get
+            {
+                AttachConsole(_process.Id);
+                _outputBuffer = JConsole.GetActiveScreenBuffer();
+                return _outputBuffer.CursorTop;
+            }
+        }
+
         public void Start()
         {
             _process.Start();
-            AttachConsole(_process.Id);
         }
 
         public string ReadAll()
         {
             AttachConsole(_process.Id);
-            var buffer = JConsole.GetActiveScreenBuffer();
 
+            var buffer = JConsole.GetActiveScreenBuffer();
             int height = buffer.CursorTop + 1;
             int width = buffer.Width;
 
-            Console.WriteLine(buffer.CursorTop);
-            Console.WriteLine(buffer.OutputMode.ToString());
-            Console.WriteLine(buffer.ProcessedOutput);
+            var block = GetBlock(buffer, height, width);
 
-            var block = new ConsoleCharInfo[height, width];
-            buffer.ReadBlock(block, 0, 0, 0, 0, width, height);
+            return GetContent(block, width, height);
+        }
 
-            var builder = new StringBuilder(height * width);
+        public string Read(int start, int end)
+        {
+            var block = new ConsoleCharInfo[end - start + 1, _outputBuffer.Width];
+            _outputBuffer.ReadBlock(block, 0, start, 0, 0, _outputBuffer.Width, end);
+            
+            return GetContent(block, _outputBuffer.Width, end-start + 1);
+            
+        }
+
+        private static string GetContent(ConsoleCharInfo[,] block, int width, int height)
+        {
+            var builder = new StringBuilder(height*width);
             for (int line = 0; line < height; line++)
             {
                 builder.Append(Environment.NewLine);
@@ -65,6 +83,13 @@ namespace ConsolePlus.Domain
             }
 
             return builder.ToString();
+        }
+
+        private ConsoleCharInfo[,] GetBlock(ConsoleScreenBuffer buffer, int height, int width)
+        {
+            var block = new ConsoleCharInfo[height,width];
+            buffer.ReadBlock(block, 0, 0, 0, 0, width, height);
+            return block;
         }
 
         public void Write(char key)

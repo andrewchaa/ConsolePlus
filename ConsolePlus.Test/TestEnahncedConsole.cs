@@ -34,6 +34,43 @@ namespace ConsolePlus.Test
             console.Write((char)13);
         }
 
+        [Test]
+        public void Should_Get_The_Current_Line_Of_The_Output_Buffer()
+        {
+            var console = new EnhancedConsole();
+            console.Start();
 
+            Assert.That(console.CurrentLine, Is.EqualTo(3));
+
+            Close(console);
+        }
+
+        [Test]
+        public void Should_Read_Output_Buffer_Incrementally()
+        {
+            var console = new EnhancedConsole();
+            console.Start();
+
+            int currentLine = 0;
+            string result = string.Empty;
+
+            if (console.CurrentLine > currentLine)
+            {
+                result = console.Read(currentLine, console.CurrentLine);
+            }
+            
+            Assert.That(result.Length, Is.GreaterThan(0));
+
+            Close(console);
+        }
+
+        private static void Close(EnhancedConsole console)
+        {
+            console.Write('e');
+            console.Write('x');
+            console.Write('i');
+            console.Write('t');
+            console.Write((char) 13);
+        }
     }
 }

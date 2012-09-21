@@ -86,6 +86,8 @@ namespace ConsolePlus.Test
             inputBuffer.WindowInput = true;
             inputBuffer.WriteEvents(events, events.Count());
 
+            
+
         }
     }
 }
