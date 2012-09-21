@@ -63,10 +63,10 @@ namespace ConsolePlus.Domain
 
         public string Read(int start, int end)
         {
-            var block = new ConsoleCharInfo[end - start + 1, _outputBuffer.Width];
-            _outputBuffer.ReadBlock(block, 0, start, 0, 0, _outputBuffer.Width, end);
+            var buffer = new ConsoleCharInfo[end - start + 1, _outputBuffer.Width];
+            _outputBuffer.ReadBlock(buffer, 0, 0, 0, start, _outputBuffer.Width - 1, end);
             
-            return GetContent(block, _outputBuffer.Width, end-start + 1);
+            return GetContent(buffer, _outputBuffer.Width - 1, end-start + 1);
             
         }
 
