@@ -43,6 +43,17 @@ namespace ConsolePlus.Domain
             }
         }
 
+        public int WindowTop
+        {
+            get
+            {
+                AttachConsole(_process.Id);
+                _outputBuffer = JConsole.GetActiveScreenBuffer();
+                return _outputBuffer.WindowTop;
+                
+            }
+        }
+
         public void Start()
         {
             _process.Start();

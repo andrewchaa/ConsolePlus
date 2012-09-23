@@ -31,15 +31,17 @@ namespace ConsolePlus
             MoveCursorToTheEnd();
 
             int currentLine = 0;
+            int windowTop = 0;
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromMilliseconds(30);
             _timer.Tick += (o, args) =>
                                   {
-                                      if (_console.CurrentLine > currentLine)
+                                      if (_console.CurrentLine > currentLine || _console.WindowTop > windowTop)
                                       {
                                           tbxConsole.Text += _console.Read(currentLine + 1, _console.CurrentLine);
                                           MoveCursorToTheEnd();
                                           currentLine = _console.CurrentLine;
+                                          windowTop = _console.WindowTop;
                                       }
                                   };
             _timer.IsEnabled = true;

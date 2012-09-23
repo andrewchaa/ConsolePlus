@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using ConsolePlus.Domain;
 using ConsolePlus.Infrastructure;
 using Microsoft.Win32.SafeHandles;
@@ -34,7 +35,7 @@ namespace ConsolePlus.Test
         }
 
         [Test]
-        public void Buffer_States()
+        public void Buffer_CursorTop_Test()
         {
             var process = new Process { StartInfo = { FileName = "cmd.exe" } };
             process.Start();
@@ -44,6 +45,8 @@ namespace ConsolePlus.Test
 
             Assert.That(buffer.CursorTop, Is.EqualTo(3));
             Assert.That(buffer.CursorLeft, Is.GreaterThan(0));
+
+            
 
             var events = new List<EventArgs>();
             events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'd' });
@@ -64,6 +67,38 @@ namespace ConsolePlus.Test
         }
 
         [Test]
+        public void Buffer_Scroll_Test()
+        {
+            var process = new Process { StartInfo = { FileName = "cmd.exe" } };
+            process.Start();
+
+            AttachConsole(process.Id);
+            var buffer = JConsole.GetActiveScreenBuffer();
+
+            for (int i = 0; i < 25; i++)
+            {
+                var events = new List<EventArgs>();
+                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'd' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'd' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'i' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'i' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'r' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'r' });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = (char)13 });
+                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = (char)13 });
+
+                var inputBuffer = JConsole.GetInputBuffer();
+                inputBuffer.WindowInput = true;
+                inputBuffer.WriteEvents(events, events.Count());
+
+                Thread.Sleep(500);
+                buffer.WriteLine(buffer.WindowTop.ToString());
+                
+            }
+
+        }
+
+        [Test]
         public void Should_Send_Typed_Content_To_Console()
         {
             var process = new Process { StartInfo = { FileName = "cmd.exe" } };
@@ -71,7 +106,11 @@ namespace ConsolePlus.Test
 
             AttachConsole(process.Id);
             var buffer = JConsole.GetActiveScreenBuffer();
-            
+
+            Assert.That(buffer.CursorTop, Is.EqualTo(3));
+
+            buffer.SetWindowPosition(0, 1);
+
             var events = new List<EventArgs>();
             events.Add(new ConsoleKeyEventArgs {KeyDown = true, RepeatCount = 1, KeyChar = 'd'});
             events.Add(new ConsoleKeyEventArgs {KeyDown = false, RepeatCount = 1, KeyChar = 'd'});

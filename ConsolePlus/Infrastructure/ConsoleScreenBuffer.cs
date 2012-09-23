@@ -10,7 +10,7 @@ namespace ConsolePlus.Infrastructure
     public class ConsoleScreenBuffer : IDisposable
     {
         // Windows resource handle.
-        private IntPtr handle;
+        private IntPtr _handle;
 
         // Flag indicates whether the object owns the handle.
         // If true, the handle is closed when the object is disposed.
@@ -22,13 +22,13 @@ namespace ConsolePlus.Infrastructure
         /// </summary>
         public ConsoleScreenBuffer()
         {
-            handle = WinCon.CreateConsoleScreenBuffer(
+            _handle = WinCon.CreateConsoleScreenBuffer(
                 WinApi.GENERIC_READ | WinApi.GENERIC_WRITE,
                 WinApi.FILE_SHARE_READ | WinApi.FILE_SHARE_WRITE,
                 null,
                 WinCon.CONSOLE_TEXTMODE_BUFFER,
                 IntPtr.Zero);
-            if (handle.ToInt32() == WinApi.INVALID_HANDLE_VALUE)
+            if (_handle.ToInt32() == WinApi.INVALID_HANDLE_VALUE)
             {
                 throw new IOException("Unable to create screen buffer", Marshal.GetLastWin32Error());
             }
@@ -41,7 +41,7 @@ namespace ConsolePlus.Infrastructure
         /// <param name="handle">Handle to an existing Windows console screen buffer.</param>
         public ConsoleScreenBuffer(IntPtr handle)
         {
-            this.handle = handle;
+            this._handle = handle;
             ownsHandle = false;
         }
 
@@ -66,10 +66,10 @@ namespace ConsolePlus.Infrastructure
                 if (disposing)
                 {
                 }
-                if (ownsHandle && handle != IntPtr.Zero)
+                if (ownsHandle && _handle != IntPtr.Zero)
                 {
-                    WinApi.CloseHandle(handle);
-                    handle = IntPtr.Zero;
+                    WinApi.CloseHandle(_handle);
+                    _handle = IntPtr.Zero;
                 }
             }
             disposed = true;
@@ -80,7 +80,7 @@ namespace ConsolePlus.Infrastructure
         /// </summary>
         public IntPtr Handle
         {
-            get { return handle; }
+            get { return _handle; }
         }
 
         private ConsoleScreenBufferInfo GetScreenBufferInfo()
@@ -90,7 +90,7 @@ namespace ConsolePlus.Infrastructure
                 throw new ObjectDisposedException(this.ToString());
             }
             ConsoleScreenBufferInfo csbi = new ConsoleScreenBufferInfo();
-            if (!WinCon.GetConsoleScreenBufferInfo(handle, csbi))
+            if (!WinCon.GetConsoleScreenBufferInfo(_handle, csbi))
             {
                 int err = Marshal.GetLastWin32Error();
                 Console.WriteLine("err = {0}", err);
@@ -150,7 +150,7 @@ namespace ConsolePlus.Infrastructure
             }
 
             Coord cursorPos = new Coord((short)x, (short)y);
-            if (!WinCon.SetConsoleCursorPosition(handle, cursorPos))
+            if (!WinCon.SetConsoleCursorPosition(_handle, cursorPos))
             {
                 throw new ApplicationException("Error setting cursor position");
             }
@@ -163,7 +163,7 @@ namespace ConsolePlus.Infrastructure
                 throw new ObjectDisposedException(this.ToString());
             }
             ConsoleCursorInfo cci = new ConsoleCursorInfo();
-            if (!WinCon.GetConsoleCursorInfo(handle, cci))
+            if (!WinCon.GetConsoleCursorInfo(_handle, cci))
             {
                 throw new ApplicationException("Error getting cursor information.");
             }
@@ -178,7 +178,7 @@ namespace ConsolePlus.Infrastructure
             }
 
             ConsoleCursorInfo cci = new ConsoleCursorInfo(visible, size);
-            if (!WinCon.SetConsoleCursorInfo(handle, cci))
+            if (!WinCon.SetConsoleCursorInfo(_handle, cci))
             {
                 throw new ApplicationException("Error setting cursor information.");
             }
@@ -216,7 +216,7 @@ namespace ConsolePlus.Infrastructure
 
             Coord sz = new Coord((short)width, (short)height);
 
-            if (!WinCon.SetConsoleScreenBufferSize(handle, sz))
+            if (!WinCon.SetConsoleScreenBufferSize(_handle, sz))
             {
                 throw new IOException("Unable to set screen buffer size", Marshal.GetLastWin32Error());
             }
@@ -299,7 +299,7 @@ namespace ConsolePlus.Infrastructure
             {
                 throw new ObjectDisposedException(this.ToString());
             }
-            if (!WinCon.SetConsoleWindowInfo(handle, bAbsolute, sr))
+            if (!WinCon.SetConsoleWindowInfo(_handle, bAbsolute, sr))
             {
                 int err = Marshal.GetLastWin32Error();
                 throw new ApplicationException(String.Format("Unable to set window rect: {0}", err));
@@ -331,7 +331,7 @@ namespace ConsolePlus.Infrastructure
             {
                 throw new ObjectDisposedException(this.ToString());
             }
-            Coord size = WinCon.GetLargestConsoleWindowSize(handle);
+            Coord size = WinCon.GetLargestConsoleWindowSize(_handle);
             if (size.X == 0 && size.Y == 0)
             {
                 throw new ApplicationException("Error getting largest window size");
@@ -413,7 +413,7 @@ namespace ConsolePlus.Infrastructure
                 (short)(sourceLeft + sourceWidth - 1), (short)(sourceTop + sourceHeight - 1));
             Coord dest = new Coord((short)targetLeft, (short)targetTop);
             ConsoleCharInfo cci = new ConsoleCharInfo(sourceChar, new ConsoleCharAttribute(sourceForeColor, sourceBackColor));
-            if (!WinCon.ScrollConsoleScreenBuffer(handle, sourceRect, null, dest, ref cci))
+            if (!WinCon.ScrollConsoleScreenBuffer(_handle, sourceRect, null, dest, ref cci))
             {
                 throw new IOException("Error scrolling screen buffer", Marshal.GetLastWin32Error());
             }
@@ -473,7 +473,7 @@ namespace ConsolePlus.Infrastructure
                     throw new ObjectDisposedException(this.ToString());
                 }
                 int mode = 0;
-                if (!WinCon.GetConsoleMode(handle, ref mode))
+                if (!WinCon.GetConsoleMode(_handle, ref mode))
                 {
                     throw new ApplicationException("Unable to get console mode.");
                 }
@@ -485,7 +485,7 @@ namespace ConsolePlus.Infrastructure
                 {
                     throw new ObjectDisposedException(this.ToString());
                 }
-                if (!WinCon.SetConsoleMode(handle, (int)value))
+                if (!WinCon.SetConsoleMode(_handle, (int)value))
                 {
                     throw new ApplicationException("Unable to set console mode.");
                 }
@@ -499,7 +499,7 @@ namespace ConsolePlus.Infrastructure
         public void SetDisplayMode(ConsoleDisplayMode mode)
         {
             Coord newSize = new Coord(0, 0);
-            if (!WinCon.SetConsoleDisplayMode(this.handle, (int)mode, ref newSize))
+            if (!WinCon.SetConsoleDisplayMode(this._handle, (int)mode, ref newSize))
             {
                 int err = Marshal.GetLastWin32Error();
                 throw new IOException("Unable to set display mode.", err);
@@ -567,7 +567,7 @@ namespace ConsolePlus.Infrastructure
         /// <param name="attr">The desired output attribute.</param>
         public void SetTextAttribute(ConsoleCharAttribute attr)
         {
-            if (!WinCon.SetConsoleTextAttribute(handle, attr))
+            if (!WinCon.SetConsoleTextAttribute(_handle, attr))
             {
                 throw new ApplicationException("Unable to set text attribute");
             }
@@ -593,7 +593,7 @@ namespace ConsolePlus.Infrastructure
                 throw new ObjectDisposedException(this.ToString());
             }
             ConsoleFontInfo cfi = new ConsoleFontInfo();
-            if (!WinCon.GetCurrentConsoleFont(handle, bMax, cfi))
+            if (!WinCon.GetCurrentConsoleFont(_handle, bMax, cfi))
             {
                 throw new ApplicationException("Unable to get font information.");
             }
@@ -615,7 +615,7 @@ namespace ConsolePlus.Infrastructure
             Coord pos = new Coord((short)x, (short)y);
             ConsoleCharAttribute attr = new ConsoleCharAttribute(fgColor, bgColor);
             int attrsWritten = 0;
-            if (!WinCon.FillConsoleOutputAttribute(handle, attr, numAttrs, pos, ref attrsWritten))
+            if (!WinCon.FillConsoleOutputAttribute(_handle, attr, numAttrs, pos, ref attrsWritten))
             {
                 throw new ApplicationException("Error writing attributes");
             }
@@ -634,7 +634,7 @@ namespace ConsolePlus.Infrastructure
         {
             Coord pos = new Coord((short)x, (short)y);
             int charsWritten = 0;
-            if (!WinCon.FillConsoleOutputCharacter(handle, c, numChars, pos, ref charsWritten))
+            if (!WinCon.FillConsoleOutputCharacter(_handle, c, numChars, pos, ref charsWritten))
             {
                 throw new ApplicationException("Error writing attributes");
             }
@@ -722,7 +722,7 @@ namespace ConsolePlus.Infrastructure
                 throw new ObjectDisposedException(this.ToString());
             }
             int charsWritten = 0;
-            if (!WinCon.WriteConsole(handle, text, nChars, ref charsWritten, IntPtr.Zero))
+            if (!WinCon.WriteConsole(_handle, text, nChars, ref charsWritten, IntPtr.Zero))
             {
                 throw new System.IO.IOException("Write error", Marshal.GetLastWin32Error());
             }
@@ -762,7 +762,7 @@ namespace ConsolePlus.Infrastructure
             }
             int charsWritten = 0;
             Coord writePos = new Coord((short)x, (short)y);
-            if (!WinCon.WriteConsoleOutputCharacter(handle, text, nChars, writePos, ref charsWritten))
+            if (!WinCon.WriteConsoleOutputCharacter(_handle, text, nChars, writePos, ref charsWritten))
             {
                 throw new System.IO.IOException("Write error", Marshal.GetLastWin32Error());
             }
@@ -790,7 +790,7 @@ namespace ConsolePlus.Infrastructure
             int attrsWritten = 0;
             Coord writePos = new Coord((short)x, (short)y);
 
-            if (!WinCon.WriteConsoleOutputAttribute(handle, attrs, attrs.Length, writePos, ref attrsWritten))
+            if (!WinCon.WriteConsoleOutputAttribute(_handle, attrs, attrs.Length, writePos, ref attrsWritten))
             {
                 throw new System.IO.IOException("Write error", Marshal.GetLastWin32Error());
             }
@@ -816,7 +816,7 @@ namespace ConsolePlus.Infrastructure
             Coord bufferSize = new Coord((short)buff.GetLength(1), (short)buff.GetLength(0));
             Coord bufferPos = new Coord((short)buffX, (short)buffY);
             SmallRect writeRegion = new SmallRect((short)left, (short)top, (short)right, (short)bottom);
-            if (!WinCon.WriteConsoleOutput(handle, buff, bufferSize, bufferPos, writeRegion))
+            if (!WinCon.WriteConsoleOutput(_handle, buff, bufferSize, bufferPos, writeRegion))
             {
                 throw new IOException("Write error.", Marshal.GetLastWin32Error());
             }
@@ -837,7 +837,7 @@ namespace ConsolePlus.Infrastructure
             }
             char[] buff = new char[nChars];
             int charsRead = 0;
-            if (!WinCon.ReadConsoleOutputCharacter(handle, buff, nChars,
+            if (!WinCon.ReadConsoleOutputCharacter(_handle, buff, nChars,
                 new Coord((short)x, (short)y), ref charsRead))
             {
                 throw new System.IO.IOException("Read error", Marshal.GetLastWin32Error());
@@ -860,7 +860,7 @@ namespace ConsolePlus.Infrastructure
             }
             ConsoleCharAttribute[] buff = new ConsoleCharAttribute[nColors];
             int colorsRead = 0;
-            if (!WinCon.ReadConsoleOutputAttribute(handle, buff, nColors,
+            if (!WinCon.ReadConsoleOutputAttribute(_handle, buff, nColors,
                 new Coord((short)x, (short)y), ref colorsRead))
             {
                 throw new System.IO.IOException("Read error", Marshal.GetLastWin32Error());
@@ -894,7 +894,7 @@ namespace ConsolePlus.Infrastructure
             Coord bufferSize = new Coord((short)buff.GetLength(1), (short)buff.GetLength(0));
             Coord bufferPos = new Coord((short)buffX, (short)buffY);
             SmallRect readRegion = new SmallRect((short)left, (short)top, (short)right, (short)bottom);
-            if (!WinCon.ReadConsoleOutput(handle, buff, bufferSize, bufferPos, readRegion))
+            if (!WinCon.ReadConsoleOutput(_handle, buff, bufferSize, bufferPos, readRegion))
             {
                 throw new IOException("Read error.", Marshal.GetLastWin32Error());
             }
