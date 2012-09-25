@@ -22,28 +22,19 @@ namespace ConsolePlus
         {
             InitializeComponent();
 
-            _command = new CommandParser();
             _console = new EnhancedConsole();
-            _console.Start();
 
             Thread.Sleep(200);
-            tbxConsole.Text = _console.ReadAll();
-            MoveCursorToTheEnd();
 
-            int currentLine = 0;
-            int windowTop = 0;
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(30);
+            _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(300)};
             _timer.Tick += (o, args) =>
-                                  {
-                                      if (_console.CurrentLine > currentLine || _console.WindowTop > windowTop)
-                                      {
-                                          tbxConsole.Text += _console.Read(currentLine + 1, _console.CurrentLine);
-                                          MoveCursorToTheEnd();
-                                          currentLine = _console.CurrentLine;
-                                          windowTop = _console.WindowTop;
-                                      }
-                                  };
+                               {
+                                   if (!_console.ContentChanged)
+                                       return;
+
+                                   tbxConsole.Text = _console.ReadAll();
+                                   MoveCursorToTheEnd();
+                               };
             _timer.IsEnabled = true;
         }
 

@@ -12,13 +12,11 @@ namespace ConsolePlus.Test
     {
 
         [Test]
-        public void Should_Read_Output()
+        public void Should_Read_Output_To_The_End()
         {
             var console = new EnhancedConsole();
-            console.Start();
 
             Assert.That(console.ReadAll(), Is.Not.Null, "Output is null");
-            Assert.That(console.ReadAll(), Contains.Substring(Environment.NewLine), "Newline character is not present");
 
             console.Write('d');
             console.Write('i');
@@ -27,42 +25,50 @@ namespace ConsolePlus.Test
 
             Assert.That(console.ReadAll(), Contains.Substring("dir"), "user command doesn't exist");
 
-            console.Write('e');
-            console.Write('x');
+            Close(console);
+        }
+
+        [Test]
+        public void ReadAll_Should_Truncate_Empty_Lines()
+        {
+            var console = new EnhancedConsole();
+
+            string content = console.ReadAll();
+            Assert.That(content.Split(new string[] {"\r\n"}, StringSplitOptions.None).Length, Is.EqualTo(5));
+
+            Close(console);
+        }
+
+        [Test]
+        public void ReadAll_Should_Read_The_Last_Line_Without_Empty_Spaces()
+        {
+            var console = new EnhancedConsole();
+
+            string content = console.ReadAll();
+            Assert.That(content.Substring(content.Length-1, 1), Is.EqualTo(">"));
+
+            Close(console);
+        }
+
+
+        [Test]
+        public void Content_Changed_Becomes_True_When_Buffer_Has_New_Content()
+        {
+            var console = new EnhancedConsole();
+
+            Assert.That(console.ContentChanged, Is.True);
+            Assert.That(console.ContentChanged, Is.False);
+
+            console.Write('d');
             console.Write('i');
-            console.Write('t');
+            console.Write('r');
             console.Write((char)13);
-        }
 
-        [Test]
-        public void Should_Get_The_Current_Line_Of_The_Output_Buffer()
-        {
-            var console = new EnhancedConsole();
-            console.Start();
-
-            Assert.That(console.CurrentLine, Is.EqualTo(3));
+            Assert.That(console.ContentChanged, Is.True);
 
             Close(console);
         }
 
-        [Test]
-        public void Should_Read_Output_Buffer_Incrementally()
-        {
-            var console = new EnhancedConsole();
-            console.Start();
-
-            int currentLine = 0;
-            string result = string.Empty;
-
-            if (console.CurrentLine > currentLine)
-            {
-                result = console.Read(currentLine, console.CurrentLine);
-            }
-            
-            Assert.That(result.Length, Is.GreaterThan(0));
-
-            Close(console);
-        }
 
         private static void Close(EnhancedConsole console)
         {

@@ -75,26 +75,38 @@ namespace ConsolePlus.Test
             AttachConsole(process.Id);
             var buffer = JConsole.GetActiveScreenBuffer();
 
-            for (int i = 0; i < 25; i++)
-            {
-                var events = new List<EventArgs>();
-                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'd' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'd' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'i' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'i' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'r' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'r' });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = (char)13 });
-                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = (char)13 });
+            Thread.Sleep(1000);
 
-                var inputBuffer = JConsole.GetInputBuffer();
-                inputBuffer.WindowInput = true;
-                inputBuffer.WriteEvents(events, events.Count());
+            var chars = new ConsoleCharInfo[300, 120];
+            buffer.ReadBlock(chars, 0, 0, 0, 0, 120, 299);
 
-                Thread.Sleep(500);
-                buffer.WriteLine(buffer.WindowTop.ToString());
-                
-            }
+            //            for (int i = 0; i < 500; i++)
+//            {
+//                var chars = new ConsoleCharInfo[1, 120];
+//                buffer.ReadBlock(chars, 0, 0, 0, i, 120, i);
+//            }
+
+
+//            for (int i = 0; i < 25; i++)
+//            {
+//                var events = new List<EventArgs>();
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'd' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'd' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'i' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'i' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = 'r' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = 'r' });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = true, RepeatCount = 1, KeyChar = (char)13 });
+//                events.Add(new ConsoleKeyEventArgs { KeyDown = false, RepeatCount = 1, KeyChar = (char)13 });
+//
+//                var inputBuffer = JConsole.GetInputBuffer();
+//                inputBuffer.WindowInput = true;
+//                inputBuffer.WriteEvents(events, events.Count());
+//
+//                Thread.Sleep(500);
+//                buffer.WriteLine(buffer.WindowTop.ToString());
+//                
+//            }
 
         }
 

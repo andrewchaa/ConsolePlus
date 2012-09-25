@@ -28,69 +28,68 @@ namespace ConsolePlus.Domain
                                                }
                            };
 
+            _process.Start();
             History = new CommandHistory();
         }
 
         public CommandHistory History { get; private set; }
 
-        public int CurrentLine
+        private string _oldLastLine = string.Empty;
+        public bool ContentChanged
         {
             get
             {
                 AttachConsole(_process.Id);
                 _outputBuffer = JConsole.GetActiveScreenBuffer();
-                return _outputBuffer.CursorTop;
-            }
-        }
 
-        public int WindowTop
-        {
-            get
-            {
-                AttachConsole(_process.Id);
-                _outputBuffer = JConsole.GetActiveScreenBuffer();
-                return _outputBuffer.WindowTop;
+                string lastLine = Read(_outputBuffer.CursorTop, _outputBuffer.Width);
+                if (String.Compare(_oldLastLine, lastLine, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    _oldLastLine = lastLine;
+                    return true;
+                }
                 
+                return false;
             }
-        }
-
-        public void Start()
-        {
-            _process.Start();
         }
 
         public string ReadAll()
         {
             AttachConsole(_process.Id);
+            _outputBuffer = JConsole.GetActiveScreenBuffer();
 
-            var buffer = JConsole.GetActiveScreenBuffer();
-            int height = buffer.CursorTop + 1;
-            int width = buffer.Width;
+            var builder = new StringBuilder(_outputBuffer.Width * _outputBuffer.Height);
+            for (int i = 0; i < _outputBuffer.CursorTop + 1; i++)
+            {
+                bool isLastLine = i == _outputBuffer.CursorTop;
+                if (isLastLine)
+                {
+                    builder.Append(Read(i, _outputBuffer.CursorLeft));
+                    return builder.ToString();
+                }
 
-            var block = GetBlock(buffer, height, width);
+                builder.Append(Read(i, _outputBuffer.Width));
+            }
 
-            return GetContent(block, width, height);
+            return builder.ToString();
+
         }
 
-        public string Read(int start, int end)
+        private string Read(int lineNumber, int width)
         {
-            var buffer = new ConsoleCharInfo[end - start + 1, _outputBuffer.Width];
-            _outputBuffer.ReadBlock(buffer, 0, 0, 0, start, _outputBuffer.Width - 1, end);
-            
-            return GetContent(buffer, _outputBuffer.Width - 1, end-start + 1);
-            
+            var buffer = new ConsoleCharInfo[1, width];
+            _outputBuffer.ReadBlock(buffer, 0, 0, 0, lineNumber, width-1, lineNumber);
+
+            return GetContent(buffer, width, 1);
         }
 
         private static string GetContent(ConsoleCharInfo[,] block, int width, int height)
         {
-            var builder = new StringBuilder(height*width);
-            for (int line = 0; line < height; line++)
+            var builder = new StringBuilder(width + 2);
+            builder.Append(Environment.NewLine);
+            for (int i = 0; i < width; i++)
             {
-                builder.Append(Environment.NewLine);
-                for (int i = 0; i < width; i++)
-                {
-                    builder.Append(block[line, i].UnicodeChar);
-                }
+                builder.Append(block[0, i].UnicodeChar);
             }
 
             return builder.ToString();
