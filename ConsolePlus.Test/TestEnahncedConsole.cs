@@ -52,6 +52,20 @@ namespace ConsolePlus.Test
 
 
         [Test]
+        public void ReadAll_Ignore_NewLine_In_The_Console_Other_ThanNextLine()
+        {
+            var console = new EnhancedConsole();
+
+            for (int i = 0; i < 120; i++)
+            {
+                console.Write(i.ToString().ToCharArray()[0]);
+            }
+
+            string content = console.ReadAll();
+
+        }
+
+        [Test]
         public void Content_Changed_Becomes_True_When_Buffer_Has_New_Content()
         {
             var console = new EnhancedConsole();

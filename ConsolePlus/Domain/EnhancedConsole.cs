@@ -104,6 +104,8 @@ namespace ConsolePlus.Domain
 
         public void Write(char key)
         {
+            AttachConsole(_process.Id);
+
             WriteEventsToConsoleProcess(key);
 //            History.Add(key);
         }
