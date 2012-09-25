@@ -77,6 +77,9 @@ namespace ConsolePlus.Domain
 
         private string Read(int lineNumber, int width)
         {
+            if (width <= 0)
+                return string.Empty;
+
             var buffer = new ConsoleCharInfo[1, width];
             _outputBuffer.ReadBlock(buffer, 0, 0, 0, lineNumber, width-1, lineNumber);
 
