@@ -15,27 +15,33 @@ namespace ConsolePlus
     public partial class MainWindow
     {
         private readonly EnhancedConsole _console;
-        private readonly IParse _command;
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
+        private readonly KeyHandler _keyHandler;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _console = new EnhancedConsole();
+            _keyHandler = new KeyHandler();
 
             Thread.Sleep(200);
 
-            _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(300)};
+            _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(500)};
             _timer.Tick += (o, args) =>
-                               {
-                                   if (!_console.ContentChanged)
-                                       return;
+                {
+                    if (!_console.ContentChanged)
+                        return;
 
-                                   tbxConsole.Text = _console.ReadAll();
-                                   MoveCursorToTheEnd();
-                               };
+                    UpdateConsole();
+                };
             _timer.IsEnabled = true;
+        }
+
+        public void UpdateConsole()
+        {
+            tbxConsole.Text = _console.ReadAll();
+            MoveCursorToTheEnd();
         }
 
         private void MoveCursorToTheEnd()
@@ -46,19 +52,15 @@ namespace ConsolePlus
             tbxConsole.SelectionLength = 0;
         }
 
-        private void tbxConsole_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void TbxConsolePreviewKeyDown(object sender, KeyEventArgs e)
         {
-            char key = KeyHelper.GetCharFromKey(e.Key);
-            if (e.Key == Key.Return)
-            {
-                key = Convert.ToChar(13);
-            } 
-            else if (e.Key == Key.LeftShift)
-            {
+            char key = _keyHandler.GetCharacterFrom(e.Key);
+            if (key == char.MinValue)
                 return;
-            }
 
             _console.Write(key);
+            e.Handled = true; // Stop keys from being typed into textbox
+            UpdateConsole();
         }
 
     }

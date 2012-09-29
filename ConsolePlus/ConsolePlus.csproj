@@ -71,6 +71,7 @@
     <Compile Include="Domain\CommandParser.cs" />
     <Compile Include="Domain\IParse.cs" />
     <Compile Include="Domain\EnhancedConsole.cs" />
+    <Compile Include="Domain\KeyHandler.cs" />
     <Compile Include="Infrastructure\ConsoleInputBuffer.cs" />
     <Compile Include="Infrastructure\ConsoleScreenBuffer.cs" />
     <Compile Include="Infrastructure\JConsole.cs" />

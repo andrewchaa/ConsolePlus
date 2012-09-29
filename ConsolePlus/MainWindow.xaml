@@ -4,6 +4,6 @@
         Title="Console+" Height="705" Width="935">
     <Grid>
         <TextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" Background="Black" Foreground="#FF28C128" 
-                 PreviewKeyDown="tbxConsole_PreviewKeyDown" TextWrapping="WrapWithOverflow"></TextBox>
+                 PreviewKeyDown="TbxConsolePreviewKeyDown" TextWrapping="WrapWithOverflow"></TextBox>
     </Grid>
 </Window>
