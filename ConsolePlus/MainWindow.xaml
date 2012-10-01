@@ -3,7 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Console+" Height="705" Width="935">
     <Grid>
-        <TextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" Background="Black" Foreground="#FF28C128" 
-                 PreviewKeyDown="TbxConsolePreviewKeyDown" TextWrapping="WrapWithOverflow"></TextBox>
+        <RichTextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" Background="Black" Foreground="#FF28C128" HorizontalAlignment="Left"
+                 PreviewKeyDown="TbxConsolePreviewKeyDown">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
     </Grid>
 </Window>

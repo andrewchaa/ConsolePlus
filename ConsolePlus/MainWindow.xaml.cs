@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Timers;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ConsolePlus.Domain;
@@ -21,6 +22,7 @@ namespace ConsolePlus
         public MainWindow()
         {
             InitializeComponent();
+            tbxConsole.Focus();
 
             _console = new EnhancedConsole();
             _keyHandler = new KeyHandler();
@@ -40,16 +42,12 @@ namespace ConsolePlus
 
         public void UpdateConsole()
         {
-            tbxConsole.Text = _console.ReadAll();
-            MoveCursorToTheEnd();
-        }
+            new TextRange(tbxConsole.Document.ContentStart, tbxConsole.Document.ContentEnd)
+                {
+                    Text = _console.ReadAll()
+                };
 
-        private void MoveCursorToTheEnd()
-        {
-            int lastPosition = tbxConsole.Text.Length;
-            tbxConsole.Focus();
-            tbxConsole.SelectionStart = lastPosition;
-            tbxConsole.SelectionLength = 0;
+            tbxConsole.CaretPosition = tbxConsole.CaretPosition.DocumentEnd;
         }
 
         private void TbxConsolePreviewKeyDown(object sender, KeyEventArgs e)
