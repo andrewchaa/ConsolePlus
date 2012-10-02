@@ -4,6 +4,7 @@ using System.Threading;
 using System.Timers;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using ConsolePlus.Domain;
 using ConsolePlus.Infrastructure;
@@ -17,15 +18,15 @@ namespace ConsolePlus
     {
         private readonly EnhancedConsole _console;
         private readonly DispatcherTimer _timer;
-        private readonly KeyHandler _keyHandler;
 
         public MainWindow()
         {
             InitializeComponent();
+            
             tbxConsole.Focus();
+            tbxConsole.TextArea.TextEntering += TextEntering;
 
             _console = new EnhancedConsole();
-            _keyHandler = new KeyHandler();
 
             Thread.Sleep(200);
 
@@ -42,19 +43,15 @@ namespace ConsolePlus
 
         public void UpdateConsole()
         {
-            new TextRange(tbxConsole.Document.ContentStart, tbxConsole.Document.ContentEnd)
-                {
-                    Text = _console.ReadAll()
-                };
-
-            tbxConsole.CaretPosition = tbxConsole.CaretPosition.DocumentEnd;
+            tbxConsole.Document.Text = _console.ReadAll();
+            tbxConsole.ScrollToEnd();
         }
 
-        private void TbxConsolePreviewKeyDown(object sender, KeyEventArgs e)
+        private void TextEntering(object sender, TextCompositionEventArgs e)
         {
-            char key = _keyHandler.GetCharacterFrom(e.Key);
-            if (key == char.MinValue)
-                return;
+            char key = e.Text[0];
+            if (key == '\n')
+                key = (char) 13;
 
             _console.Write(key);
             e.Handled = true; // Stop keys from being typed into textbox

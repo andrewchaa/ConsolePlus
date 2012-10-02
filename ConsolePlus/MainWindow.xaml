@@ -1,15 +1,9 @@
 ﻿<Window x:Class="ConsolePlus.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Console+" Height="705" Width="935">
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" Title="Console+" Height="705" Width="935">
     <Grid>
-        <RichTextBox Name="tbxConsole" AcceptsTab="False" AcceptsReturn="False" Background="Black" Foreground="#FF28C128" HorizontalAlignment="Left"
-                 PreviewKeyDown="TbxConsolePreviewKeyDown">
-            <RichTextBox.Resources>
-                <Style TargetType="{x:Type Paragraph}">
-                    <Setter Property="Margin" Value="0" />
-                </Style>
-            </RichTextBox.Resources>
-        </RichTextBox>
+        <avalonedit:TextEditor Name="tbxConsole" FontFamily="Consolas" FontSize="10pt" Background="Black" Foreground="Gainsboro" HorizontalAlignment="Stretch">
+        </avalonedit:TextEditor>
     </Grid>
 </Window>

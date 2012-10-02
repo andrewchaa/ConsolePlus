@@ -14,7 +14,7 @@ namespace ConsolePlus.Infrastructure
 
         // Flag indicates whether the object owns the handle.
         // If true, the handle is closed when the object is disposed.
-        public bool ownsHandle = false;
+        public bool ownsHandle = false; 
 
         /// <summary>
         /// Create a new instance of the ConsoleScreenBuffer class by creating a new
