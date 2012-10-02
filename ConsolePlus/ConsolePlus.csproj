@@ -40,7 +40,7 @@
     <ApplicationIcon>console.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit">
+    <Reference Include="ICSharpCode.AvalonEdit, Version=4.2.0.8783, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.4.2.0.8783\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -67,13 +67,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Samples\AvalonEdit\BraceFoldingStrategy.cs" />
-    <Compile Include="Samples\AvalonEdit\ColorizeAvalonEdit.cs" />
-    <Compile Include="Samples\AvalonEdit\ImageElementGenerator.cs" />
-    <Compile Include="Samples\AvalonEdit\MyCompletionData.cs" />
-    <Compile Include="Samples\AvalonEdit\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -116,16 +109,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Samples\AvalonEdit\CustomHighlighting.xshd" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Samples\AvalonEdit\Window1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -136,11 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="console.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Samples\AvalonEdit\article.html" />
-    <Content Include="Samples\AvalonEdit\document.html" />
-    <Content Include="Samples\AvalonEdit\rendering.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

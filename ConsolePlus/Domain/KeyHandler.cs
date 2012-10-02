@@ -9,7 +9,7 @@ namespace ConsolePlus.Domain
     {
         public char GetCharacterFrom(Key key)
         {
-            if (key == Key.LeftShift)
+            if (key == Key.LeftShift || key == Key.RightShift || key == Key.LeftCtrl || key == Key.RightCtrl)
                 return Char.MinValue;
 
             if (key == Key.Return)

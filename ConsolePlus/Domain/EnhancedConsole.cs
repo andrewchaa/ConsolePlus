@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using ConsolePlus.Infrastructure;
@@ -17,22 +18,8 @@ namespace ConsolePlus.Domain
 
         public EnhancedConsole()
         {
-            _process = new Process
-                           {
-                               EnableRaisingEvents = true,
-                               StartInfo = new ProcessStartInfo("cmd.exe", String.Empty) 
-                                               {
-                                                   //                                UseShellExecute = false,
-                                                   //                                ErrorDialog = false,
-                                                   //                                CreateNoWindow = true
-                                               }
-                           };
-
-            _process.Start();
-            History = new CommandHistory();
+            _process = CreateProcess();
         }
-
-        public CommandHistory History { get; private set; }
 
         private string _oldLastLine = string.Empty;
         public bool ContentChanged
@@ -56,7 +43,7 @@ namespace ConsolePlus.Domain
         public string ReadAll()
         {
             AttachConsole(_process.Id);
-            _outputBuffer = JConsole.GetActiveScreenBuffer();
+            _outputBuffer = GetActiveScreenBuffer();
 
             var builder = new StringBuilder(_outputBuffer.Width * _outputBuffer.Height);
             for (int i = 0; i < _outputBuffer.CursorTop + 1; i++)
@@ -72,7 +59,6 @@ namespace ConsolePlus.Domain
             }
 
             return builder.ToString();
-
         }
 
         private string Read(int lineNumber, int width)
@@ -84,6 +70,24 @@ namespace ConsolePlus.Domain
             _outputBuffer.ReadBlock(buffer, 0, 0, 0, lineNumber, width-1, lineNumber);
 
             return GetContent(buffer, width, 1);
+        }
+
+        private Process CreateProcess()
+        {
+            var process = new Process
+                              {
+                                  EnableRaisingEvents = true,
+                                  StartInfo = new ProcessStartInfo("cmd.exe", String.Empty)
+                                                  {
+                                                      UseShellExecute = false,
+                                                      ErrorDialog = false,
+                                                      CreateNoWindow = true
+                                                  }
+                              };
+
+            process.Start();
+
+            return process;
         }
 
         private static string GetContent(ConsoleCharInfo[,] block, int width, int height)
@@ -98,19 +102,11 @@ namespace ConsolePlus.Domain
             return builder.ToString();
         }
 
-        private ConsoleCharInfo[,] GetBlock(ConsoleScreenBuffer buffer, int height, int width)
-        {
-            var block = new ConsoleCharInfo[height,width];
-            buffer.ReadBlock(block, 0, 0, 0, 0, width, height);
-            return block;
-        }
-
         public void Write(char key)
         {
             AttachConsole(_process.Id);
 
             WriteEventsToConsoleProcess(key);
-//            History.Add(key);
         }
 
 
@@ -126,5 +122,34 @@ namespace ConsolePlus.Domain
             inputBuffer.WindowInput = true;
             inputBuffer.WriteEvents(events.ToArray(), events.Count);
         }
+
+        /// <summary>
+        /// Opens the currently active screen buffer.
+        /// </summary>
+        /// <returns>A new <see cref="ConsoleScreenBuffer" /> instance that references the currently active
+        /// console screen buffer.</returns>
+        /// <remarks>This method allocates a new ConsoleScreenBuffer instance.  Callers should
+        /// call Dispose on the returned instance when they're done with it.</remarks>
+        private ConsoleScreenBuffer GetActiveScreenBuffer()
+        {
+            // CONOUT$ always references the current active screen buffer.
+            // NOTE:  *MUST* specify GENERIC_READ | GENERIC_WRITE.  Otherwise
+            // the console API calls will fail with Win32 error INVALID_HANDLE_VALUE.
+            // Also must include the file sharing flags or CreateFile will fail.
+            IntPtr outHandle = WinApi.CreateFile("CONOUT$",
+                WinApi.GENERIC_READ | WinApi.GENERIC_WRITE,
+                WinApi.FILE_SHARE_READ | WinApi.FILE_SHARE_WRITE,
+                null,
+                WinApi.OPEN_EXISTING,
+                0,
+                IntPtr.Zero);
+            if (outHandle.ToInt32() == WinApi.INVALID_HANDLE_VALUE)
+            {
+                throw new IOException("Unable to open CONOUT$", Marshal.GetLastWin32Error());
+            }
+
+            return new ConsoleScreenBuffer(outHandle) { ownsHandle = true };
+        }
+
     }
 }

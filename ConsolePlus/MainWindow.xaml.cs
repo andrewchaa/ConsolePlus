@@ -2,12 +2,15 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Timers;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using ConsolePlus.Domain;
 using ConsolePlus.Infrastructure;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Rendering;
 
 namespace ConsolePlus
 {
@@ -46,6 +49,7 @@ namespace ConsolePlus
         {
             tbxConsole.Document.Text = _console.ReadAll();
             tbxConsole.ScrollToEnd();
+            tbxConsole.TextArea.TextView.LineTransformers.Add(new OffsetColorizer());
         }
 
 
@@ -60,5 +64,59 @@ namespace ConsolePlus
             UpdateConsole();
         }
 
+    }
+
+    public class OffsetColorizer : DocumentColorizingTransformer
+    {
+        protected override void ColorizeLine(DocumentLine line)
+        {
+            if (line.Length == 0)
+                return;
+
+            if (line.Offset < 2 || line.Offset > 20)
+                return;
+
+            ChangeLinePart(
+                2,
+                20,
+                (element) =>
+                {
+                    Typeface tf = element.TextRunProperties.Typeface;
+                    element.TextRunProperties.SetTypeface(new Typeface(
+                        tf.FontFamily,
+                        FontStyles.Italic,
+                        FontWeights.Bold,
+                        tf.Stretch
+                    ));
+                });
+        }
+//        protected override void ColorizeLine(DocumentLine line)
+//        {
+//            int lineStartOffset = line.Offset;
+//            string text = CurrentContext.Document.GetText(line);
+//            int start = 0;
+//            int index;
+//            while ((index = text.IndexOf("Mi", start)) >= 0)
+//            {
+//                base.ChangeLinePart(
+//                    lineStartOffset + index, // startOffset
+//                    lineStartOffset + index + 20, // endOffset
+//                    (VisualLineElement element) =>
+//                    {
+//                        // This lambda gets called once for every VisualLineElement
+//                        // between the specified offsets.
+//                        Typeface tf = element.TextRunProperties.Typeface;
+//                        // Replace the typeface with a modified version of
+//                        // the same typeface
+//                        element.TextRunProperties.SetTypeface(new Typeface(
+//                            tf.FontFamily,
+//                            FontStyles.Italic,
+//                            FontWeights.Bold,
+//                            tf.Stretch
+//                        ));
+//                    });
+//                start = index + 1; // search for next occurrence
+//            }
+//        }
     }
 }
