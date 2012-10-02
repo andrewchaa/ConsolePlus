@@ -18,15 +18,16 @@ namespace ConsolePlus
     {
         private readonly EnhancedConsole _console;
         private readonly DispatcherTimer _timer;
+        private readonly KeyHandler _keyHandler;
 
         public MainWindow()
         {
             InitializeComponent();
             
             tbxConsole.Focus();
-            tbxConsole.TextArea.TextEntering += TextEntering;
 
             _console = new EnhancedConsole();
+            _keyHandler = new KeyHandler();
 
             Thread.Sleep(200);
 
@@ -47,11 +48,12 @@ namespace ConsolePlus
             tbxConsole.ScrollToEnd();
         }
 
-        private void TextEntering(object sender, TextCompositionEventArgs e)
+
+        private void TbxConsolePreviewKeyDown(object sender, KeyEventArgs e)
         {
-            char key = e.Text[0];
-            if (key == '\n')
-                key = (char) 13;
+            char key = _keyHandler.GetCharacterFrom(e.Key);
+            if (key == char.MinValue)
+                return;
 
             _console.Write(key);
             e.Handled = true; // Stop keys from being typed into textbox
