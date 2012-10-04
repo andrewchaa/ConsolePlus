@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" Title="Console+" Height="705" Width="935">
     <Grid>
-        <avalonedit:TextEditor Name="tbxConsole" FontFamily="Consolas" FontSize="10pt" Background="Black" Foreground="Gainsboro"
+        <avalonedit:TextEditor Name="tbxConsole" FontFamily="Consolas" FontSize="10pt" Background="Beige" Foreground="DarkBlue"
                                HorizontalAlignment="Stretch" PreviewKeyDown="TbxConsolePreviewKeyDown">
         </avalonedit:TextEditor>
     </Grid>

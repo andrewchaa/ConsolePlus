@@ -20,28 +20,36 @@ namespace ConsolePlus
     public partial class MainWindow
     {
         private readonly EnhancedConsole _console;
-        private readonly DispatcherTimer _timer;
+        private DispatcherTimer _timer;
         private readonly KeyHandler _keyHandler;
+        private OffsetColorizer _offsetColorizer;
 
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            _offsetColorizer = new OffsetColorizer();
             tbxConsole.Focus();
+            tbxConsole.TextArea.TextView.LineTransformers.Add(_offsetColorizer);
 
             _console = new EnhancedConsole();
             _keyHandler = new KeyHandler();
 
+            SetUpdateTimer();
+        }
+
+        private void SetUpdateTimer()
+        {
             Thread.Sleep(200);
 
             _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(500)};
             _timer.Tick += (o, args) =>
-                {
-                    if (!_console.ContentChanged)
-                        return;
+                               {
+                                   if (!_console.ContentChanged)
+                                       return;
 
-                    UpdateConsole();
-                };
+                                   UpdateConsole();
+                               };
             _timer.IsEnabled = true;
         }
 
@@ -49,7 +57,8 @@ namespace ConsolePlus
         {
             tbxConsole.Document.Text = _console.ReadAll();
             tbxConsole.ScrollToEnd();
-            tbxConsole.TextArea.TextView.LineTransformers.Add(new OffsetColorizer());
+            _offsetColorizer.StartOffset = 0;
+            _offsetColorizer.EndOffset = 200;
         }
 
 
@@ -68,28 +77,21 @@ namespace ConsolePlus
 
     public class OffsetColorizer : DocumentColorizingTransformer
     {
+        public int StartOffset { get; set; }
+        public int EndOffset { get; set; }
+
         protected override void ColorizeLine(DocumentLine line)
         {
             if (line.Length == 0)
                 return;
 
-            if (line.Offset < 2 || line.Offset > 20)
+            if (line.Offset < StartOffset || line.Offset > EndOffset)
                 return;
 
-            ChangeLinePart(
-                2,
-                20,
-                element =>
-                {
-                    Typeface tf = element.TextRunProperties.Typeface;
-                    element.TextRunProperties.SetForegroundBrush(Brushes.Red);
-                    element.TextRunProperties.SetTypeface(new Typeface(
-                        tf.FontFamily,
-                        FontStyles.Italic,
-                        FontWeights.Bold,
-                        tf.Stretch
-                    ));
-                });
+            int start = line.Offset > StartOffset ? line.Offset : StartOffset;
+            int end = EndOffset > line.EndOffset ? line.EndOffset : EndOffset;
+
+            ChangeLinePart(start, end, element => element.TextRunProperties.SetForegroundBrush(Brushes.Red));
         }
     }
 }
