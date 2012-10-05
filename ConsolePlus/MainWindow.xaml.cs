@@ -5,12 +5,9 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using ConsolePlus.Domain;
 using ConsolePlus.Infrastructure;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Rendering;
 
 namespace ConsolePlus
 {
@@ -73,25 +70,5 @@ namespace ConsolePlus
             UpdateConsole();
         }
 
-    }
-
-    public class OffsetColorizer : DocumentColorizingTransformer
-    {
-        public int StartOffset { get; set; }
-        public int EndOffset { get; set; }
-
-        protected override void ColorizeLine(DocumentLine line)
-        {
-            if (line.Length == 0)
-                return;
-
-            if (line.Offset < StartOffset || line.Offset > EndOffset)
-                return;
-
-            int start = line.Offset > StartOffset ? line.Offset : StartOffset;
-            int end = EndOffset > line.EndOffset ? line.EndOffset : EndOffset;
-
-            ChangeLinePart(start, end, element => element.TextRunProperties.SetForegroundBrush(Brushes.Red));
-        }
     }
 }

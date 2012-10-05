@@ -80,6 +80,7 @@
     <Compile Include="Infrastructure\ConsoleScreenBuffer.cs" />
     <Compile Include="Infrastructure\JConsole.cs" />
     <Compile Include="Infrastructure\KeyHelper.cs" />
+    <Compile Include="Infrastructure\OffsetColorizer.cs" />
     <Compile Include="Infrastructure\WinApi.cs" />
     <Compile Include="Infrastructure\WinCon.cs" />
     <Compile Include="MainWindow.xaml.cs">
